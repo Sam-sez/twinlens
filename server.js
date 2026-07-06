@@ -1,0 +1,126 @@
+require('dotenv').config();
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const path = require('path');
+const { pool, migrate } = require('./db');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+const JWT_SECRET = process.env.JWT_SECRET || 'change-this-secret';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'changeme';
+
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+// ---------- AUTH ----------
+function requireAuth(req, res, next) {
+  const header = req.headers.authorization || '';
+  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
+  if (!token) return res.status(401).json({ error: 'Not logged in' });
+  try {
+    jwt.verify(token, JWT_SECRET);
+    next();
+  } catch {
+    res.status(401).json({ error: 'Session expired, please log in again' });
+  }
+}
+
+app.post('/api/admin/login', (req, res) => {
+  const { password } = req.body;
+  if (password !== ADMIN_PASSWORD) {
+    return res.status(401).json({ error: 'Incorrect password' });
+  }
+  const token = jwt.sign({ role: 'admin' }, JWT_SECRET, { expiresIn: '30d' });
+  res.json({ token });
+});
+
+// Public config for Cloudinary widget (no secrets — cloud name + unsigned preset are safe to expose)
+app.get('/api/config', (req, res) => {
+  res.json({
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME || '',
+    uploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET || ''
+  });
+});
+
+// ---------- GALLERY ----------
+app.get('/api/gallery', async (req, res) => {
+  const { rows } = await pool.query('SELECT * FROM gallery ORDER BY created_at DESC');
+  res.json(rows);
+});
+
+app.post('/api/gallery', requireAuth, async (req, res) => {
+  const { image_url, category } = req.body;
+  if (!image_url || !category) return res.status(400).json({ error: 'image_url and category are required' });
+  const { rows } = await pool.query(
+    'INSERT INTO gallery (image_url, category) VALUES ($1, $2) RETURNING *',
+    [image_url, category]
+  );
+  res.json(rows[0]);
+});
+
+app.delete('/api/gallery/:id', requireAuth, async (req, res) => {
+  await pool.query('DELETE FROM gallery WHERE id = $1', [req.params.id]);
+  res.json({ ok: true });
+});
+
+// ---------- TESTIMONIALS ----------
+app.get('/api/testimonials', async (req, res) => {
+  const { rows } = await pool.query('SELECT * FROM testimonials ORDER BY created_at DESC');
+  res.json(rows);
+});
+
+app.post('/api/testimonials', requireAuth, async (req, res) => {
+  const { quote, client_name, event_label } = req.body;
+  if (!quote || !client_name) return res.status(400).json({ error: 'quote and client_name are required' });
+  const { rows } = await pool.query(
+    'INSERT INTO testimonials (quote, client_name, event_label) VALUES ($1, $2, $3) RETURNING *',
+    [quote, client_name, event_label || '']
+  );
+  res.json(rows[0]);
+});
+
+app.delete('/api/testimonials/:id', requireAuth, async (req, res) => {
+  await pool.query('DELETE FROM testimonials WHERE id = $1', [req.params.id]);
+  res.json({ ok: true });
+});
+
+// ---------- PACKAGES ----------
+app.get('/api/packages', async (req, res) => {
+  const { rows } = await pool.query('SELECT * FROM packages ORDER BY sort_order ASC, created_at ASC');
+  res.json(rows);
+});
+
+app.post('/api/packages', requireAuth, async (req, res) => {
+  const { title, subtitle, price, duration, inclusions, sort_order } = req.body;
+  if (!title) return res.status(400).json({ error: 'title is required' });
+  const { rows } = await pool.query(
+    'INSERT INTO packages (title, subtitle, price, duration, inclusions, sort_order) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *',
+    [title, subtitle || '', price || '', duration || '', inclusions || '', sort_order || 0]
+  );
+  res.json(rows[0]);
+});
+
+app.put('/api/packages/:id', requireAuth, async (req, res) => {
+  const { title, subtitle, price, duration, inclusions, sort_order } = req.body;
+  const { rows } = await pool.query(
+    `UPDATE packages SET title=$1, subtitle=$2, price=$3, duration=$4, inclusions=$5, sort_order=$6 WHERE id=$7 RETURNING *`,
+    [title, subtitle || '', price || '', duration || '', inclusions || '', sort_order || 0, req.params.id]
+  );
+  res.json(rows[0]);
+});
+
+app.delete('/api/packages/:id', requireAuth, async (req, res) => {
+  await pool.query('DELETE FROM packages WHERE id = $1', [req.params.id]);
+  res.json({ ok: true });
+});
+
+// ---------- START ----------
+migrate()
+  .then(() => {
+    app.listen(PORT, () => console.log(`TwinLens Studio running on port ${PORT}`));
+  })
+  .catch((err) => {
+    console.error('Failed to run migrations', err);
+    process.exit(1);
+  });
+        

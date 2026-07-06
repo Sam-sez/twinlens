@@ -12,8 +12,20 @@ async function migrate() {
     CREATE TABLE IF NOT EXISTS gallery (
       id SERIAL PRIMARY KEY,
       image_url TEXT NOT NULL,
-      category TEXT NOT NULL,
+      title TEXT,
+      description TEXT,
       created_at TIMESTAMP DEFAULT NOW()
+    );
+  `);
+  // In case this is an existing DB from an earlier version, migrate its shape
+  await pool.query(`ALTER TABLE gallery ADD COLUMN IF NOT EXISTS title TEXT;`);
+  await pool.query(`ALTER TABLE gallery ADD COLUMN IF NOT EXISTS description TEXT;`);
+  await pool.query(`ALTER TABLE gallery ALTER COLUMN category DROP NOT NULL;`).catch(() => {});
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS settings (
+      key TEXT PRIMARY KEY,
+      value TEXT
     );
   `);
 

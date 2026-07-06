@@ -25,6 +25,7 @@ function showLogin() {
 function showDashboard() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
+  loadHeroAdmin();
   loadGalleryAdmin();
   loadTestimonialsAdmin();
   loadPackagesAdmin();
@@ -68,8 +69,9 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
-// ---------- GALLERY ----------
+// ---------- CLOUDINARY (shared widget, target tracked by a variable) ----------
 let cloudinaryWidget = null;
+let uploadTarget = 'gallery'; // 'gallery' | 'hero_left' | 'hero_right'
 
 async function initCloudinary() {
   const res = await fetch('/api/config');
@@ -86,29 +88,73 @@ async function initCloudinary() {
     multiple: false
   }, async (error, result) => {
     if (!error && result && result.event === 'success') {
-      const category = document.getElementById('galleryCategory').value;
-      const statusEl = document.getElementById('uploadStatus');
-      statusEl.textContent = 'Saving...';
-      try {
-        await apiFetch('/api/gallery', {
-          method: 'POST',
-          headers: authHeaders(),
-          body: JSON.stringify({ image_url: result.info.secure_url, category })
-        });
-        statusEl.textContent = 'Photo added.';
-        loadGalleryAdmin();
-      } catch (e) {
-        statusEl.textContent = 'Could not save photo.';
+      const url = result.info.secure_url;
+      if (uploadTarget === 'hero_left' || uploadTarget === 'hero_right') {
+        const statusEl = document.getElementById('heroStatus');
+        statusEl.textContent = 'Saving...';
+        try {
+          await apiFetch('/api/settings', {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify({ key: uploadTarget, value: url })
+          });
+          statusEl.textContent = 'Saved.';
+          loadHeroAdmin();
+        } catch (e) {
+          statusEl.textContent = 'Could not save photo.';
+        }
+      } else {
+        const statusEl = document.getElementById('uploadStatus');
+        statusEl.textContent = 'Saving...';
+        const title = document.getElementById('galleryTitle').value;
+        const description = document.getElementById('galleryDescription').value;
+        try {
+          await apiFetch('/api/gallery', {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify({ image_url: url, title, description })
+          });
+          statusEl.textContent = 'Photo added.';
+          document.getElementById('galleryTitle').value = '';
+          document.getElementById('galleryDescription').value = '';
+          loadGalleryAdmin();
+        } catch (e) {
+          statusEl.textContent = 'Could not save photo.';
+        }
       }
     }
   });
 }
 
 document.getElementById('uploadBtn').addEventListener('click', () => {
+  uploadTarget = 'gallery';
   if (cloudinaryWidget) cloudinaryWidget.open();
   else document.getElementById('uploadStatus').textContent = 'Upload isn\'t set up yet — see the note above.';
 });
 
+document.getElementById('uploadHeroLeftBtn').addEventListener('click', () => {
+  uploadTarget = 'hero_left';
+  if (cloudinaryWidget) cloudinaryWidget.open();
+  else document.getElementById('heroStatus').textContent = 'Upload isn\'t set up yet.';
+});
+
+document.getElementById('uploadHeroRightBtn').addEventListener('click', () => {
+  uploadTarget = 'hero_right';
+  if (cloudinaryWidget) cloudinaryWidget.open();
+  else document.getElementById('heroStatus').textContent = 'Upload isn\'t set up yet.';
+});
+
+// ---------- HERO ----------
+async function loadHeroAdmin() {
+  const res = await apiFetch('/api/settings');
+  const settings = await res.json();
+  const left = document.getElementById('heroLeftPreview');
+  const right = document.getElementById('heroRightPreview');
+  if (settings.hero_left) left.style.backgroundImage = `url(${settings.hero_left})`;
+  if (settings.hero_right) right.style.backgroundImage = `url(${settings.hero_right})`;
+}
+
+// ---------- GALLERY ----------
 async function loadGalleryAdmin() {
   const res = await apiFetch('/api/gallery');
   const items = await res.json();
@@ -120,7 +166,7 @@ async function loadGalleryAdmin() {
     row.innerHTML = `
       <div class="row-left">
         <img src="${item.image_url}" alt="">
-        <div class="text"><p>${item.category}</p></div>
+        <div class="text"><p>${item.title || '(untitled)'}</p><span class="meta">${item.description || ''}</span></div>
       </div>
       <button class="btn-delete" data-id="${item.id}">Delete</button>
     `;
@@ -217,4 +263,4 @@ if (getToken()) {
   showLogin();
 }
 initCloudinary();
-                             
+    

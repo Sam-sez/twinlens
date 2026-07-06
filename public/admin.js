@@ -26,6 +26,7 @@ function showDashboard() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
   loadHeroAdmin();
+  loadServicesAdmin();
   loadGalleryAdmin();
   loadTestimonialsAdmin();
   loadPackagesAdmin();
@@ -71,7 +72,9 @@ document.querySelectorAll('.tab').forEach(tab => {
 
 // ---------- CLOUDINARY (shared widget, target tracked by a variable) ----------
 let cloudinaryWidget = null;
-let uploadTarget = 'gallery'; // 'gallery' | 'hero_left' | 'hero_right'
+let uploadTarget = 'gallery'; // 'gallery' | 'hero_left' | 'hero_right' | 'service_weddings' | 'service_portraits' | 'service_editorial' | 'service_events'
+
+const SETTINGS_TARGETS = ['hero_left', 'hero_right', 'service_weddings', 'service_portraits', 'service_editorial', 'service_events'];
 
 async function initCloudinary() {
   const res = await fetch('/api/config');
@@ -89,8 +92,9 @@ async function initCloudinary() {
   }, async (error, result) => {
     if (!error && result && result.event === 'success') {
       const url = result.info.secure_url;
-      if (uploadTarget === 'hero_left' || uploadTarget === 'hero_right') {
-        const statusEl = document.getElementById('heroStatus');
+      if (SETTINGS_TARGETS.includes(uploadTarget)) {
+        const isHero = uploadTarget === 'hero_left' || uploadTarget === 'hero_right';
+        const statusEl = document.getElementById(isHero ? 'heroStatus' : 'servicesStatus');
         statusEl.textContent = 'Saving...';
         try {
           await apiFetch('/api/settings', {
@@ -99,7 +103,7 @@ async function initCloudinary() {
             body: JSON.stringify({ key: uploadTarget, value: url })
           });
           statusEl.textContent = 'Saved.';
-          loadHeroAdmin();
+          if (isHero) loadHeroAdmin(); else loadServicesAdmin();
         } catch (e) {
           statusEl.textContent = 'Could not save photo.';
         }
@@ -144,6 +148,30 @@ document.getElementById('uploadHeroRightBtn').addEventListener('click', () => {
   else document.getElementById('heroStatus').textContent = 'Upload isn\'t set up yet.';
 });
 
+document.getElementById('uploadServiceWeddingsBtn').addEventListener('click', () => {
+  uploadTarget = 'service_weddings';
+  if (cloudinaryWidget) cloudinaryWidget.open();
+  else document.getElementById('servicesStatus').textContent = 'Upload isn\'t set up yet.';
+});
+
+document.getElementById('uploadServicePortraitsBtn').addEventListener('click', () => {
+  uploadTarget = 'service_portraits';
+  if (cloudinaryWidget) cloudinaryWidget.open();
+  else document.getElementById('servicesStatus').textContent = 'Upload isn\'t set up yet.';
+});
+
+document.getElementById('uploadServiceEditorialBtn').addEventListener('click', () => {
+  uploadTarget = 'service_editorial';
+  if (cloudinaryWidget) cloudinaryWidget.open();
+  else document.getElementById('servicesStatus').textContent = 'Upload isn\'t set up yet.';
+});
+
+document.getElementById('uploadServiceEventsBtn').addEventListener('click', () => {
+  uploadTarget = 'service_events';
+  if (cloudinaryWidget) cloudinaryWidget.open();
+  else document.getElementById('servicesStatus').textContent = 'Upload isn\'t set up yet.';
+});
+
 // ---------- HERO ----------
 async function loadHeroAdmin() {
   const res = await apiFetch('/api/settings');
@@ -152,6 +180,23 @@ async function loadHeroAdmin() {
   const right = document.getElementById('heroRightPreview');
   if (settings.hero_left) left.style.backgroundImage = `url(${settings.hero_left})`;
   if (settings.hero_right) right.style.backgroundImage = `url(${settings.hero_right})`;
+}
+
+// ---------- SERVICES ----------
+async function loadServicesAdmin() {
+  const res = await apiFetch('/api/settings');
+  const settings = await res.json();
+  const map = {
+    service_weddings: 'serviceWeddingsPreview',
+    service_portraits: 'servicePortraitsPreview',
+    service_editorial: 'serviceEditorialPreview',
+    service_events: 'serviceEventsPreview'
+  };
+  Object.entries(map).forEach(([key, elId]) => {
+    if (settings[key]) {
+      document.getElementById(elId).style.backgroundImage = `url(${settings[key]})`;
+    }
+  });
 }
 
 // ---------- GALLERY ----------

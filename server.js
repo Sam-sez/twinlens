@@ -42,6 +42,25 @@ app.get('/api/config', (req, res) => {
   });
 });
 
+// ---------- SETTINGS (hero images) ----------
+app.get('/api/settings', async (req, res) => {
+  const { rows } = await pool.query('SELECT key, value FROM settings');
+  const settings = {};
+  rows.forEach(r => settings[r.key] = r.value);
+  res.json(settings);
+});
+
+app.post('/api/settings', requireAuth, async (req, res) => {
+  const { key, value } = req.body;
+  if (!key) return res.status(400).json({ error: 'key is required' });
+  await pool.query(
+    `INSERT INTO settings (key, value) VALUES ($1, $2)
+     ON CONFLICT (key) DO UPDATE SET value = $2`,
+    [key, value]
+  );
+  res.json({ ok: true });
+});
+
 // ---------- GALLERY ----------
 app.get('/api/gallery', async (req, res) => {
   const { rows } = await pool.query('SELECT * FROM gallery ORDER BY created_at DESC');
@@ -49,11 +68,11 @@ app.get('/api/gallery', async (req, res) => {
 });
 
 app.post('/api/gallery', requireAuth, async (req, res) => {
-  const { image_url, category } = req.body;
-  if (!image_url || !category) return res.status(400).json({ error: 'image_url and category are required' });
+  const { image_url, title, description } = req.body;
+  if (!image_url) return res.status(400).json({ error: 'image_url is required' });
   const { rows } = await pool.query(
-    'INSERT INTO gallery (image_url, category) VALUES ($1, $2) RETURNING *',
-    [image_url, category]
+    'INSERT INTO gallery (image_url, title, description) VALUES ($1, $2, $3) RETURNING *',
+    [image_url, title || '', description || '']
   );
   res.json(rows[0]);
 });
@@ -123,4 +142,3 @@ migrate()
     console.error('Failed to run migrations', err);
     process.exit(1);
   });
-        

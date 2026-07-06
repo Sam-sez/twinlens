@@ -24,21 +24,34 @@
   <div class="logo-mark"><div class="rings"><span></span><span></span></div>TWINLENS ADMIN</div>
 
   <div class="tabs" style="margin-top:40px;">
-    <div class="tab active" data-tab="gallery">Gallery</div>
+    <div class="tab active" data-tab="hero">Hero</div>
+    <div class="tab" data-tab="gallery">Gallery</div>
     <div class="tab" data-tab="testimonials">Testimonials</div>
     <div class="tab" data-tab="packages">Packages</div>
   </div>
 
-  <!-- GALLERY TAB -->
-  <div class="tab-panel active" id="tab-gallery">
+  <!-- HERO TAB -->
+  <div class="tab-panel active" id="tab-hero">
     <div class="admin-form">
-      <label>Category</label>
-      <select id="galleryCategory">
-        <option>Weddings</option>
-        <option>Portraits</option>
-        <option>Editorial</option>
-        <option>Events</option>
-      </select>
+      <label>Photographer One (left side of hero)</label>
+      <div id="heroLeftPreview" style="width:100%;aspect-ratio:16/9;background-size:cover;background-position:center;background-color:var(--ink);border:1px solid var(--line);margin-top:8px;"></div>
+      <button type="button" class="upload-btn" id="uploadHeroLeftBtn">Upload / replace photo</button>
+    </div>
+    <div class="admin-form">
+      <label>Photographer Two (right side of hero)</label>
+      <div id="heroRightPreview" style="width:100%;aspect-ratio:16/9;background-size:cover;background-position:center;background-color:var(--ink);border:1px solid var(--line);margin-top:8px;"></div>
+      <button type="button" class="upload-btn" id="uploadHeroRightBtn">Upload / replace photo</button>
+    </div>
+    <div class="small-note" id="heroStatus"></div>
+  </div>
+
+  <!-- GALLERY TAB -->
+  <div class="tab-panel" id="tab-gallery">
+    <div class="admin-form">
+      <label>Name (optional)</label>
+      <input type="text" id="galleryTitle" placeholder="e.g. Amara & Kene's Wedding">
+      <label>Description (optional)</label>
+      <textarea id="galleryDescription" placeholder="A short line about this shoot"></textarea>
       <button type="button" class="upload-btn" id="uploadBtn">Upload photo from your phone</button>
       <div class="small-note" id="uploadStatus"></div>
     </div>

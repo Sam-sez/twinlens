@@ -36,17 +36,35 @@ nav{
 .nav-cta{font-size:12px;letter-spacing:0.1em;text-transform:uppercase;border:1px solid var(--bone);padding:9px 18px;}
 @media(max-width:720px){ .nav-links{display:none;} }
 
-/* HERO */
-.hero{position:relative;height:100vh;display:flex;background:var(--ink);}
-.hero-half{flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:120px 30px 56px;}
+/* HERO - OPTIMIZED FOR PORTRAIT PHOTOGRAPHY */
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  flex-direction:row; /* Keeps them as side-by-side vertical columns across all screens like 1000864167.png */
+  background:var(--ink);
+  overflow:hidden;
+}
+.hero-half{
+  flex:1;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  padding:120px 30px 56px;
+  height:100vh;
+}
+.hero-half.left {
+  border-right: 1px solid var(--line); /* Crisp center line dividing the portraits */
+}
 .hero-frame{
   position:absolute;
-  inset:0; /* Fills out each half flawlessly edge-to-edge */
+  inset:0; 
   background-size:cover;
   background-repeat:no-repeat;
-  background-position:center;
+  background-position:center 20%; /* Safely preserves headshots/framing for portrait layouts like 1000858307.jpg */
   background-color:var(--panel-2);
-  border:1px solid var(--line);
   z-index:1;
 }
 .hero-half.left .hero-frame{background-image:linear-gradient(135deg,#2b2620,#100e0b);}
@@ -55,8 +73,14 @@ nav{
 .hero-half .tag b{color:var(--gold);font-style:normal;}
 
 @media(max-width:720px){
-  .hero{flex-direction:column;} /* Stacks the two halves vertically on mobile viewports */
-  .hero-half{padding: 100px 18px 46px;}
+  .hero {
+    min-height: auto;
+    height: 75vh; /* Balances aspect ratios perfectly on mobile devices so frames aren't overly stretched */
+  }
+  .hero-half {
+    height: 75vh;
+    padding: 100px 16px 40px;
+  }
 }
 
 .hero-seam{position:absolute;left:50%;top:0;bottom:0;transform:translateX(-50%);width:1px;background:var(--line);z-index:5;}
@@ -67,17 +91,17 @@ nav{
   transform: translate(-50%, -50%);
   z-index: 10;
   text-align: center;
-  width: 90%;
+  width: 92%;
   max-width: 640px;
-  padding: 56px 40px; /* Generates clean safe space inside the glass badge */
+  padding: 56px 40px;
 }
 .hero-center .glow{
   position: absolute;
   inset: 0;
-  background: rgba(23, 20, 15, 0.55); /* High-contrast elegant dark tint */
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(243, 238, 228, 0.12); /* Sharp premium rim edge */
+  background: rgba(15, 13, 10, 0.65); /* Rich cinematic contrast backdrop overlay */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(243, 238, 228, 0.15);
   border-radius: 8px;
   z-index: -1;
 }
@@ -86,7 +110,7 @@ nav{
 .hero-center .rings-big span:first-child{left:0;}
 .hero-center .rings-big span:last-child{left:32px;border-color:var(--bone);animation-delay:0.6s;}
 @keyframes pulse{0%,100%{opacity:0.55;} 50%{opacity:1;}}
-.hero-center h1{font-size:clamp(38px,6.4vw,74px);line-height:1.02;color:var(--bone);}
+.hero-center h1{font-size:clamp(34px,6vw,74px);line-height:1.02;color:var(--bone);}
 .hero-center h1 em{font-style:italic;color:var(--gold);}
 .hero-center p{margin-top:20px;color:var(--stone);font-size:15px;letter-spacing:0.02em;max-width:440px;margin-left:auto;margin-right:auto;}
 .scroll-cue{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:var(--stone);text-transform:uppercase;z-index:10;}
@@ -108,41 +132,48 @@ section{padding:130px 6%;position:relative;}
 .venn .circle.b{left:calc(50% - 30px);background:rgba(243,238,228,0.04);color:var(--bone);}
 @media(max-width:820px){ .intro-grid{grid-template-columns:1fr;} .venn{height:220px;} .venn .circle{width:160px;height:160px;} .venn .circle.a{left:calc(50% - 130px);} .venn .circle.b{left:calc(50% - 30px);} }
 
-/* SERVICES - HORIZONTAL SCROLL CAROUSEL */
+/* SERVICES - DISTINCT STANDALONE SWIPE TILES */
 .services-grid {
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
-  scrollbar-width: none; /* Hides default ugly layout scrollbars */
+  gap: 24px; /* Generous gap separating distinct tiles */
+  padding: 8px 4px; 
+  background: transparent;
+  border: none;
+  scrollbar-width: none;
   -ms-overflow-style: none;
 }
 .services-grid::-webkit-scrollbar {
   display: none;
 }
 .service-card {
-  flex: 0 0 85%; /* Mobile view shows 85% width to hint at the next slide */
-  scroll-snap-align: center;
+  flex: 0 0 290px; /* Forces cards into standalone uniform structural sizes on mobile */
+  scroll-snap-align: start;
   position: relative;
   overflow: hidden;
-  background: var(--ink);
+  background: var(--panel-2);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  padding: 40px 26px;
-  min-height: 400px;
+  padding: 40px 28px;
+  min-height: 420px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: background 0.4s ease;
+  border: 1px solid var(--line); /* Individual framing layout */
+  border-radius: 6px;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+.service-card:hover {
+  border-color: var(--gold);
 }
 .service-card::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(11,11,10,0.2) 0%, rgba(11,11,10,0.88) 100%);
+  background: linear-gradient(180deg, rgba(11,11,10,0.15) 0%, rgba(11,11,10,0.9) 100%);
+  z-index: 0;
 }
 .service-card > * {
   position: relative;
@@ -154,7 +185,7 @@ section{padding:130px 6%;position:relative;}
   color: var(--gold);
 }
 .service-card h3 {
-  font-size: 22px;
+  font-size: 24px;
   margin-top: 60px;
 }
 .service-card span {
@@ -166,12 +197,12 @@ section{padding:130px 6%;position:relative;}
 
 @media(min-width: 768px) {
   .service-card {
-    flex: 0 0 50%; /* Tablets show exactly 2 items cleanly */
+    flex: 0 0 calc(50% - 12px); /* Two cleanly balanced tiles side-by-side */
   }
 }
 @media(min-width: 1024px) {
   .service-card {
-    flex: 1; /* Desktop balances everything into full grid evenly across screen */
+    flex: 1; /* Desktop organically scales them into equal layout tiles without scrollbars */
   }
 }
 
@@ -246,3 +277,4 @@ footer{padding:50px 6%;display:flex;justify-content:space-between;align-items:ce
 .upload-btn{width:100%;padding:14px;background:transparent;border:1px dashed var(--line);color:var(--bone);cursor:pointer;font-size:13px;letter-spacing:0.04em;border-radius:2px;margin-top:16px;}
 .small-note{font-size:12px;color:var(--stone);margin-top:8px;}
 .logout{float:right;color:var(--stone);font-size:12px;cursor:pointer;text-decoration:underline;}
+  

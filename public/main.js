@@ -5,27 +5,35 @@ const waLink = `https://wa.me/${WHATSAPP_NUMBER}`;
 document.getElementById('whatsappTop').href = waLink;
 document.getElementById('whatsappBottom').href = waLink;
 
+const SERVICE_KEYS = ['weddings', 'portraits', 'editorial', 'events'];
+
 async function loadHero() {
   try {
     const res = await fetch('/api/settings');
     const settings = await res.json();
-    const left = document.getElementById('heroLeft');
-    const right = document.getElementById('heroRight');
+    const left = document.getElementById('heroLeftPhoto');
+    const right = document.getElementById('heroRightPhoto');
     if (settings.hero_left) {
-      left.style.backgroundImage =
-        `linear-gradient(180deg, rgba(11,11,10,0.15) 0%, rgba(11,11,10,0.85) 100%), url(${settings.hero_left})`;
-      left.style.backgroundSize = 'cover';
-      left.style.backgroundPosition = 'center';
+      left.style.backgroundImage = `url(${settings.hero_left})`;
     }
     if (settings.hero_right) {
-      right.style.backgroundImage =
-        `linear-gradient(180deg, rgba(11,11,10,0.15) 0%, rgba(11,11,10,0.85) 100%), url(${settings.hero_right})`;
-      right.style.backgroundSize = 'cover';
-      right.style.backgroundPosition = 'center';
+      right.style.backgroundImage = `url(${settings.hero_right})`;
     }
+    applyServiceImages(settings);
   } catch (e) {
     console.error('Could not load hero settings', e);
   }
+}
+
+function applyServiceImages(settings) {
+  SERVICE_KEYS.forEach(key => {
+    const settingKey = `service_${key}`;
+    if (!settings[settingKey]) return;
+    const card = document.querySelector(`.service-card[data-service="${key}"]`);
+    if (!card) return;
+    const img = card.querySelector('.service-img');
+    if (img) img.style.backgroundImage = `url(${settings[settingKey]})`;
+  });
 }
 
 async function loadGallery() {

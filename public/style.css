@@ -42,7 +42,7 @@ nav{
 .hero-frame{
   position:absolute;
   top:120px;left:30px;right:30px;bottom:120px;
-  background-size:contain;background-repeat:no-repeat;background-position:center;
+  background-size:cover;background-repeat:no-repeat;background-position:center;
   background-color:var(--panel-2);
   border:1px solid var(--line);
   z-index:1;
@@ -57,7 +57,7 @@ nav{
 }
 .hero-seam{position:absolute;left:50%;top:0;bottom:0;transform:translateX(-50%);width:1px;background:var(--line);z-index:5;}
 .hero-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10;text-align:center;width:90%;max-width:720px;}
-.hero-center .glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:150%;height:170%;background:radial-gradient(ellipse at center, rgba(11,11,10,0.88) 0%, rgba(11,11,10,0.6) 50%, rgba(11,11,10,0) 78%);}
+.hero-center .glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:170%;height:190%;background:radial-gradient(ellipse at center, rgba(11,11,10,0.95) 0%, rgba(11,11,10,0.8) 40%, rgba(11,11,10,0.35) 65%, rgba(11,11,10,0) 85%);}
 .hero-center .rings-big{position:relative;width:96px;height:64px;margin:0 auto 28px;}
 .hero-center .rings-big span{position:absolute;top:0;width:64px;height:64px;border-radius:50%;border:1px solid var(--gold);animation:pulse 5s ease-in-out infinite;}
 .hero-center .rings-big span:first-child{left:0;}
@@ -175,3 +175,4 @@ footer{padding:50px 6%;display:flex;justify-content:space-between;align-items:ce
 .upload-btn{width:100%;padding:14px;background:transparent;border:1px dashed var(--line);color:var(--bone);cursor:pointer;font-size:13px;letter-spacing:0.04em;border-radius:2px;margin-top:16px;}
 .small-note{font-size:12px;color:var(--stone);margin-top:8px;}
 .logout{float:right;color:var(--stone);font-size:12px;cursor:pointer;text-decoration:underline;}
+  

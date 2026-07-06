@@ -36,12 +36,12 @@ nav{
 .nav-cta{font-size:12px;letter-spacing:0.1em;text-transform:uppercase;border:1px solid var(--bone);padding:9px 18px;}
 @media(max-width:720px){ .nav-links{display:none;} }
 
-/* HERO - OPTIMIZED FOR PORTRAIT PHOTOGRAPHY */
+/* HERO - CLEAN SPLIT PORTRAIT COLUMNS */
 .hero{
   position:relative;
   min-height:100vh;
   display:flex;
-  flex-direction:row; /* Keeps them as side-by-side vertical columns across all screens like 1000864167.png */
+  flex-direction:row;
   background:var(--ink);
   overflow:hidden;
 }
@@ -56,34 +56,45 @@ nav{
   height:100vh;
 }
 .hero-half.left {
-  border-right: 1px solid var(--line); /* Crisp center line dividing the portraits */
+  border-right: 1px solid var(--line);
+}
+/* Subtle cinematic shading directly over images to keep white fonts perfectly crisp */
+.hero-half::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11,11,10,0.2) 0%, rgba(11,11,10,0.45) 100%);
+  z-index: 2;
+  pointer-events: none;
 }
 .hero-frame{
   position:absolute;
-  inset:0; 
+  inset:0;
   background-size:cover;
   background-repeat:no-repeat;
-  background-position:center 20%; /* Safely preserves headshots/framing for portrait layouts like 1000858307.jpg */
+  background-position:center 20%;
   background-color:var(--panel-2);
   z-index:1;
 }
 .hero-half.left .hero-frame{background-image:linear-gradient(135deg,#2b2620,#100e0b);}
 .hero-half.right .hero-frame{background-image:linear-gradient(135deg,#1c1712,#0a0908);}
-.hero-half .tag{position:relative;z-index:2;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);}
+.hero-half .tag{position:relative;z-index:3;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);}
 .hero-half .tag b{color:var(--gold);font-style:normal;}
 
 @media(max-width:720px){
   .hero {
     min-height: auto;
-    height: 75vh; /* Balances aspect ratios perfectly on mobile devices so frames aren't overly stretched */
+    height: 80vh;
   }
   .hero-half {
-    height: 75vh;
+    height: 80vh;
     padding: 100px 16px 40px;
   }
 }
 
 .hero-seam{position:absolute;left:50%;top:0;bottom:0;transform:translateX(-50%);width:1px;background:var(--line);z-index:5;}
+
+/* TYPOGRAPHY OVERLAY - COMPLETELY STRIPPED COVERS */
 .hero-center{
   position: absolute;
   left: 50%;
@@ -92,27 +103,35 @@ nav{
   z-index: 10;
   text-align: center;
   width: 92%;
-  max-width: 640px;
-  padding: 56px 40px;
+  max-width: 600px;
+  padding: 0; /* Stripped background card dimension footprints */
+  pointer-events: none;
 }
 .hero-center .glow{
-  position: absolute;
-  inset: 0;
-  background: rgba(15, 13, 10, 0.65); /* Rich cinematic contrast backdrop overlay */
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(243, 238, 228, 0.15);
-  border-radius: 8px;
-  z-index: -1;
+  display: none; /* Completely obliterates the frosted background block covering your photos */
 }
-.hero-center .rings-big{position:relative;width:96px;height:64px;margin:0 auto 28px;}
-.hero-center .rings-big span{position:absolute;top:0;width:64px;height:64px;border-radius:50%;border:1px solid var(--gold);animation:pulse 5s ease-in-out infinite;}
-.hero-center .rings-big span:first-child{left:0;}
-.hero-center .rings-big span:last-child{left:32px;border-color:var(--bone);animation-delay:0.6s;}
-@keyframes pulse{0%,100%{opacity:0.55;} 50%{opacity:1;}}
-.hero-center h1{font-size:clamp(34px,6vw,74px);line-height:1.02;color:var(--bone);}
+.hero-center .rings-big{
+  display: none; /* Keeps just the words front and center as requested */
+}
+.hero-center h1{
+  font-size:clamp(36px, 5.8vw, 72px);
+  line-height:1.05;
+  color:var(--bone);
+  /* Elegant shadow profile prevents text from getting lost on light outdoor backgrounds */
+  text-shadow: 0 4px 24px rgba(11, 11, 10, 0.85), 0 2px 6px rgba(11, 11, 10, 0.5);
+}
 .hero-center h1 em{font-style:italic;color:var(--gold);}
-.hero-center p{margin-top:20px;color:var(--stone);font-size:15px;letter-spacing:0.02em;max-width:440px;margin-left:auto;margin-right:auto;}
+.hero-center p{
+  margin-top:22px;
+  color: var(--bone); /* Upgraded contrast color */
+  font-size:15px;
+  line-height:1.6;
+  letter-spacing:0.01em;
+  max-width:460px;
+  margin-left:auto;
+  margin-right:auto;
+  text-shadow: 0 3px 16px rgba(11, 11, 10, 0.9), 0 1px 4px rgba(11, 11, 10, 0.6);
+}
 .scroll-cue{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.2em;color:var(--stone);text-transform:uppercase;z-index:10;}
 
 /* SECTIONS */
@@ -137,8 +156,8 @@ section{padding:130px 6%;position:relative;}
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  gap: 24px; /* Generous gap separating distinct tiles */
-  padding: 8px 4px; 
+  gap: 24px;
+  padding: 8px 4px;
   background: transparent;
   border: none;
   scrollbar-width: none;
@@ -148,7 +167,7 @@ section{padding:130px 6%;position:relative;}
   display: none;
 }
 .service-card {
-  flex: 0 0 290px; /* Forces cards into standalone uniform structural sizes on mobile */
+  flex: 0 0 290px;
   scroll-snap-align: start;
   position: relative;
   overflow: hidden;
@@ -161,7 +180,7 @@ section{padding:130px 6%;position:relative;}
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid var(--line); /* Individual framing layout */
+  border: 1px solid var(--line);
   border-radius: 6px;
   transition: border-color 0.3s ease, transform 0.3s ease;
 }
@@ -197,12 +216,12 @@ section{padding:130px 6%;position:relative;}
 
 @media(min-width: 768px) {
   .service-card {
-    flex: 0 0 calc(50% - 12px); /* Two cleanly balanced tiles side-by-side */
+    flex: 0 0 calc(50% - 12px);
   }
 }
 @media(min-width: 1024px) {
   .service-card {
-    flex: 1; /* Desktop organically scales them into equal layout tiles without scrollbars */
+    flex: 1;
   }
 }
 
@@ -277,4 +296,3 @@ footer{padding:50px 6%;display:flex;justify-content:space-between;align-items:ce
 .upload-btn{width:100%;padding:14px;background:transparent;border:1px dashed var(--line);color:var(--bone);cursor:pointer;font-size:13px;letter-spacing:0.04em;border-radius:2px;margin-top:16px;}
 .small-note{font-size:12px;color:var(--stone);margin-top:8px;}
 .logout{float:right;color:var(--stone);font-size:12px;cursor:pointer;text-decoration:underline;}
-  

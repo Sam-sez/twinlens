@@ -1,39 +1,37 @@
-
+// ---- EDIT 
 const WHATSAPP_NUMBER = '+260 977750399';
 
 const waLink = `https://wa.me/${WHATSAPP_NUMBER}`;
 document.getElementById('whatsappTop').href = waLink;
 document.getElementById('whatsappBottom').href = waLink;
 
-const SERVICE_KEYS = ['weddings', 'portraits', 'editorial', 'events'];
-
 async function loadHero() {
   try {
     const res = await fetch('/api/settings');
     const settings = await res.json();
-    const left = document.getElementById('heroLeftPhoto');
-    const right = document.getElementById('heroRightPhoto');
+
     if (settings.hero_left) {
-      left.style.backgroundImage = `url(${settings.hero_left})`;
+      document.getElementById('heroLeftFrame').style.backgroundImage = `url(${settings.hero_left})`;
     }
     if (settings.hero_right) {
-      right.style.backgroundImage = `url(${settings.hero_right})`;
+      document.getElementById('heroRightFrame').style.backgroundImage = `url(${settings.hero_right})`;
     }
-    applyServiceImages(settings);
-  } catch (e) {
-    console.error('Could not load hero settings', e);
-  }
-}
 
-function applyServiceImages(settings) {
-  SERVICE_KEYS.forEach(key => {
-    const settingKey = `service_${key}`;
-    if (!settings[settingKey]) return;
-    const card = document.querySelector(`.service-card[data-service="${key}"]`);
-    if (!card) return;
-    const img = card.querySelector('.service-img');
-    if (img) img.style.backgroundImage = `url(${settings[settingKey]})`;
-  });
+    const serviceMap = {
+      service_weddings: 'serviceWeddings',
+      service_portraits: 'servicePortraits',
+      service_editorial: 'serviceEditorial',
+      service_events: 'serviceEvents'
+    };
+    Object.entries(serviceMap).forEach(([key, id]) => {
+      if (settings[key]) {
+        const el = document.getElementById(id);
+        if (el) el.style.backgroundImage = `url(${settings[key]})`;
+      }
+    });
+  } catch (e) {
+    console.error('Could not load hero/service settings', e);
+  }
 }
 
 async function loadGallery() {

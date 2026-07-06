@@ -1,19 +1,32 @@
+
 const WHATSAPP_NUMBER = '+260 977750399';
 
 const waLink = `https://wa.me/${WHATSAPP_NUMBER}`;
 document.getElementById('whatsappTop').href = waLink;
 document.getElementById('whatsappBottom').href = waLink;
 
-const CATEGORIES = ['Weddings', 'Portraits', 'Editorial', 'Events'];
-const TILE_PLAN = [
-  { category: 'Weddings', big: true },
-  { category: 'Portraits' },
-  { category: 'Editorial' },
-  { category: 'Events' },
-  { category: 'Portraits' },
-  { category: 'Weddings' },
-  { category: 'Editorial', big: true }
-];
+async function loadHero() {
+  try {
+    const res = await fetch('/api/settings');
+    const settings = await res.json();
+    const left = document.getElementById('heroLeft');
+    const right = document.getElementById('heroRight');
+    if (settings.hero_left) {
+      left.style.backgroundImage =
+        `linear-gradient(180deg, rgba(11,11,10,0.15) 0%, rgba(11,11,10,0.85) 100%), url(${settings.hero_left})`;
+      left.style.backgroundSize = 'cover';
+      left.style.backgroundPosition = 'center';
+    }
+    if (settings.hero_right) {
+      right.style.backgroundImage =
+        `linear-gradient(180deg, rgba(11,11,10,0.15) 0%, rgba(11,11,10,0.85) 100%), url(${settings.hero_right})`;
+      right.style.backgroundSize = 'cover';
+      right.style.backgroundPosition = 'center';
+    }
+  } catch (e) {
+    console.error('Could not load hero settings', e);
+  }
+}
 
 async function loadGallery() {
   const grid = document.getElementById('galleryGrid');
@@ -25,45 +38,22 @@ async function loadGallery() {
     console.error('Could not load gallery', e);
   }
 
-  const byCategory = {};
-  CATEGORIES.forEach(c => byCategory[c] = photos.filter(p => p.category === c));
+  if (photos.length === 0) {
+    grid.innerHTML = `<p style="color:var(--stone);font-size:14px;">Photos coming soon.</p>`;
+    return;
+  }
 
-  TILE_PLAN.forEach((plan) => {
-    const tile = document.createElement('div');
-    tile.className = 'gtile' + (plan.big ? ' big' : '');
-    const images = byCategory[plan.category] || [];
-
-    if (images.length === 0) {
-      const slide = document.createElement('div');
-      slide.className = 'slide active';
-      slide.style.background = 'linear-gradient(160deg,#221c14,#0a0908)';
-      const label = document.createElement('span');
-      label.className = 'slide-label';
-      label.textContent = plan.category + ' — photos coming soon';
-      slide.appendChild(label);
-      tile.appendChild(slide);
-    } else {
-      images.forEach((img, idx) => {
-        const slide = document.createElement('div');
-        slide.className = 'slide' + (idx === 0 ? ' active' : '');
-        slide.style.backgroundImage = `url(${img.image_url})`;
-        const label = document.createElement('span');
-        label.className = 'slide-label';
-        label.textContent = plan.category;
-        slide.appendChild(label);
-        tile.appendChild(slide);
-      });
-      if (images.length > 1) {
-        let current = 0;
-        setInterval(() => {
-          const slides = tile.querySelectorAll('.slide');
-          slides[current].classList.remove('active');
-          current = (current + 1) % slides.length;
-          slides[current].classList.add('active');
-        }, 3500 + Math.random() * 1500);
-      }
-    }
-    grid.appendChild(tile);
+  photos.forEach(photo => {
+    const card = document.createElement('div');
+    card.className = 'gcard';
+    card.innerHTML = `
+      <div class="photo" style="background-image:url(${photo.image_url})"></div>
+      <div class="caption">
+        ${photo.title ? `<h4>${escapeHtml(photo.title)}</h4>` : ''}
+        ${photo.description ? `<p>${escapeHtml(photo.description)}</p>` : ''}
+      </div>
+    `;
+    grid.appendChild(card);
   });
 }
 
@@ -134,6 +124,7 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+loadHero();
 loadGallery();
 loadTestimonials();
 loadPackages();

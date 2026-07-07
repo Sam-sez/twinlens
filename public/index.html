@@ -74,27 +74,51 @@
     
     <div class="services-grid">
       <div class="service-card" onclick="selectService('Party Vlogs')">
-        <div class="num">01</div>
-        <h3>Party Vlogs<br><span>Event Tracking</span></h3>
-        <div class="price-tag">From K60</div>
+        <div class="service-card-image" data-img-key="service_party_vlogs"><span class="num">01</span></div>
+        <div class="service-card-body">
+          <h3>Party Vlogs<br><span>Event Tracking</span></h3>
+          <div class="price-tag">From K60</div>
+        </div>
       </div>
-      
+
       <div class="service-card" onclick="selectService('Engagement Vlogs')">
-        <div class="num">02</div>
-        <h3>Engagement Vlogs<br><span>Milestone Cinematic</span></h3>
-        <div class="price-tag">From K160</div>
+        <div class="service-card-image" data-img-key="service_engagement_vlogs"><span class="num">02</span></div>
+        <div class="service-card-body">
+          <h3>Engagement Vlogs<br><span>Milestone Cinematic</span></h3>
+          <div class="price-tag">From K160</div>
+        </div>
       </div>
-      
+
       <div class="service-card" onclick="selectService('Advertising')">
-        <div class="num">03</div>
-        <h3>Advertising<br><span>Commercial Production</span></h3>
-        <div class="price-tag">From K50</div>
+        <div class="service-card-image" data-img-key="service_advertising"><span class="num">03</span></div>
+        <div class="service-card-body">
+          <h3>Advertising<br><span>Commercial Production</span></h3>
+          <div class="price-tag">From K50</div>
+        </div>
       </div>
-      
+
       <div class="service-card" onclick="selectService('Graduation Vlogs')">
-        <div class="num">04</div>
-        <h3>Graduation Vlogs<br><span>Memory Capture</span></h3>
-        <div class="price-tag">From K160</div>
+        <div class="service-card-image" data-img-key="service_graduation_vlogs"><span class="num">04</span></div>
+        <div class="service-card-body">
+          <h3>Graduation Vlogs<br><span>Memory Capture</span></h3>
+          <div class="price-tag">From K160</div>
+        </div>
+      </div>
+
+      <div class="service-card" onclick="selectService('Graphics Design')">
+        <div class="service-card-image" data-img-key="service_graphics_design"><span class="num">05</span></div>
+        <div class="service-card-body">
+          <h3>Graphics Design<br><span>Visual Identity</span></h3>
+          <div class="price-tag">From K150</div>
+        </div>
+      </div>
+
+      <div class="service-card" onclick="selectService('Social Media Management')">
+        <div class="service-card-image" data-img-key="service_social_media"><span class="num">06</span></div>
+        <div class="service-card-body">
+          <h3>Social Media Management<br><span>Page Curation</span></h3>
+          <div class="price-tag">From K200</div>
+        </div>
       </div>
     </div>
   </section>
@@ -222,175 +246,6 @@
     </div>
   </div>
 
-  <!-- SYSTEM CENTRAL LOGIC IMPLEMENTATION -->
-  <script>
-    // Universal Core Pricing Mapping Array Configuration
-    const serviceRegistry = {
-      'Party Vlogs': { base: 60, type: 'hourly' },
-      'Engagement Vlogs': { base: 160, type: 'hourly' },
-      'Graduation Vlogs': { base: 160, type: 'hourly' },
-      'Advertising': { base: 50, type: 'hourly' },
-      'Graphics Design': { base: 150, type: 'flat' },
-      'Social Media Management': { base: 200, type: 'flat' }
-    };
-
-    let bookingData = {
-      service: null,
-      durationLabel: null,
-      calculatedCost: 0,
-      clientName: null,
-      clientEmail: null,
-      clientPhone: null,
-      customNotes: null
-    };
-
-    function toggleBookingOverlay() {
-      const overlay = document.getElementById('bookingOverlay');
-      overlay.classList.toggle('open');
-      if (overlay.classList.contains('open') && !bookingData.service) {
-        showStep(1);
-      }
-    }
-
-    function showStep(stepNum) {
-      document.querySelectorAll('.booking-step').forEach(step => step.classList.remove('active'));
-      document.getElementById(`step${stepNum}`).classList.add('active');
-      document.getElementById('progressFill').style.width = `${(stepNum / 3) * 100}%`;
-    }
-
-    function prevStep(stepNum) {
-      showStep(stepNum);
-    }
-
-    function selectService(serviceName) {
-      bookingData.service = serviceName;
-      
-      const overlay = document.getElementById('bookingOverlay');
-      if (!overlay.classList.contains('open')) {
-        overlay.classList.add('open');
-      }
-      
-      const titleEl = document.getElementById('step2Title');
-      const container = document.getElementById('durationContainer');
-      container.innerHTML = '';
-      
-      const itemConfig = serviceRegistry[serviceName];
-
-      if (itemConfig.type === 'hourly') {
-        titleEl.innerHTML = "Select Session <em>Hours</em>";
-        container.innerHTML = `
-          <div class="tile-card" onclick="selectDuration('Standard Session (Base 3 Hours)', ${itemConfig.base})">
-            <div class="tile-meta"><span>A</span><div class="indicator"></div></div>
-            <h4>Standard Session (3 Hours Max) <span class="tile-price">K${itemConfig.base}</span></h4>
-            <p>Includes high-contrast principal tracking coverage and fully optimized final master clips.</p>
-          </div>
-          <div class="tile-card" onclick="selectDuration('Extended Session (4 Hours Total)', ${itemConfig.base + 50})">
-            <div class="tile-meta"><span>B</span><div class="indicator"></div></div>
-            <h4>Extended Coverage (4 Hours) <span class="tile-price">K${itemConfig.base + 50}</span></h4>
-            <p>Standard base timeline plus 1 extra execution hour (Flat K50 surcharge applied).</p>
-          </div>
-          <div class="tile-card" onclick="selectDuration('Extended Session (5 Hours Total)', ${itemConfig.base + 100})">
-            <div class="tile-meta"><span>C</span><div class="indicator"></div></div>
-            <h4>Extended Coverage (5 Hours) <span class="tile-price">K${itemConfig.base + 100}</span></h4>
-            <p>Standard base timeline plus 2 extra execution hours (Flat K100 surcharge applied).</p>
-          </div>
-          <div class="tile-card" onclick="selectDuration('Custom Open Timeline Target', ${itemConfig.base}, true)">
-            <div class="tile-meta"><span>D</span><div class="indicator"></div></div>
-            <h4>Other / Custom Complex Requirement <span class="tile-price">Quote</span></h4>
-            <p>Select this for custom hour distributions, fast-turnaround requests, or travel setups.</p>
-          </div>
-        `;
-      } else {
-        titleEl.innerHTML = "Confirm Project <em>Scope</em>";
-        container.innerHTML = `
-          <div class="tile-card" onclick="selectDuration('Standard Flat Project Contract', ${itemConfig.base})">
-            <div class="tile-meta"><span>A</span><div class="indicator"></div></div>
-            <h4>Standard Project Scope <span class="tile-price">K${itemConfig.base}</span></h4>
-            <p>Delivers clean baseline files engineered exactly to initial design profiles and criteria.</p>
-          </div>
-          <div class="tile-card" onclick="selectDuration('Custom Scope Assignment', ${itemConfig.base}, true)">
-            <div class="tile-meta"><span>B</span><div class="indicator"></div></div>
-            <h4>Other / Custom Scope Requirements <span class="tile-price">Quote</span></h4>
-            <p>Select this to outline high-volume design packages, complex campaigns, or continuous asset updates.</p>
-          </div>
-        `;
-      }
-      
-      showStep(2);
-    }
-
-    function selectDuration(label, priceCost, isCustom = false) {
-      bookingData.durationLabel = label;
-      bookingData.calculatedCost = priceCost;
-      
-      const notesField = document.getElementById('customNotesField');
-      if (isCustom) {
-        notesField.style.display = 'block';
-        bookingData.calculatedCost = 0; // Handed off to dynamic custom admin valuation quoting
-      } else {
-        notesField.style.display = 'none';
-        document.getElementById('clientNotes').value = '';
-      }
-      
-      // Compute Live Frontend Calculation Summary Box
-      const receiptContainer = document.getElementById('bookingSummaryReceipt');
-      if (bookingData.calculatedCost > 0) {
-        receiptContainer.innerHTML = `
-          <div class="receipt-row"><span>Service Type:</span><b>${bookingData.service}</b></div>
-          <div class="receipt-row"><span>Selected Layout:</span><b>${label}</b></div>
-          <div class="receipt-row total"><span>Estimated Price:</span><strong>ZMW ${bookingData.calculatedCost}</strong></div>
-        `;
-      } else {
-        receiptContainer.innerHTML = `
-          <div class="receipt-row"><span>Service Type:</span><b>${bookingData.service}</b></div>
-          <div class="receipt-row"><span>Selected Layout:</span><b>Custom / Other</b></div>
-          <div class="receipt-row total"><span>Estimated Price:</span><strong>Pending Custom Admin Quote</strong></div>
-        `;
-      }
-      
-      showStep(3);
-    }
-
-    function submitFinalBooking() {
-      bookingData.clientName = document.getElementById('clientName').value.trim();
-      bookingData.clientEmail = document.getElementById('clientEmail').value.trim();
-      bookingData.clientPhone = document.getElementById('clientPhone').value.trim();
-      
-      const notesEl = document.getElementById('clientNotes');
-      bookingData.customNotes = notesEl ? notesEl.value.trim() : '';
-
-      if (!bookingData.clientName || !bookingData.clientPhone) {
-        alert("Please provide your name and a valid contact phone number so we can log your request.");
-        return;
-      }
-
-      // Safe Cache System Storage Pipeline (Prevents testing loss on mobile browsers)
-      let existingLogs = JSON.parse(localStorage.getItem('twinlens_inquiries')) || [];
-      bookingData.timestamp = new Date().toISOString();
-      existingLogs.push(bookingData);
-      localStorage.setItem('twinlens_inquiries', JSON.stringify(existingLogs));
-
-      console.log("Transmission Vault Synchronized Successfully:", bookingData);
-      
-      let finalFeedbackText = `Success! Thank you ${bookingData.clientName}.\n\nYour session reservation request for ${bookingData.service} has been logged in our system.`;
-      if (bookingData.calculatedCost > 0) {
-        finalFeedbackText += `\n\nEstimated Session Cost: ZMW ${bookingData.calculatedCost}`;
-      } else {
-        finalFeedbackText += `\n\nOur studio team will review your custom notes specifications to prepare an accurate custom quote overview.`;
-      }
-      finalFeedbackText += `\n\nWe will review our active booking calendar slots and contact you at ${bookingData.clientPhone} shortly!`;
-
-      alert(finalFeedbackText);
-      toggleBookingOverlay();
-      
-      // Clean Engine Variables State
-      bookingData = { service: null, durationLabel: null, calculatedCost: 0, clientName: null, clientEmail: null, clientPhone: null, customNotes: null };
-      document.getElementById('clientName').value = '';
-      document.getElementById('clientEmail').value = '';
-      document.getElementById('clientPhone').value = '';
-      if(notesEl) notesEl.value = '';
-    }
-   <script src="/main.js"></script>
+  <script src="/main.js"></script>
 </body>
-  </html>
-  
+</html>

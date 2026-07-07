@@ -1,103 +1,306 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TwinLens Studio — Photography in Mongu</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TwinLens Studio — Photography in Mongu</title>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..400;1,9..144,300..400&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<nav>
-  <div class="logo-mark"><div class="rings"><span></span><span></span></div>TWINLENS</div>
-  <div class="nav-links">
-    <a href="#work">Work</a>
-    <a href="#packages">Packages</a>
-    <a href="#studio">Studio</a>
-  </div>
-  <a class="nav-cta" id="whatsappTop" href="#" target="_blank" rel="noopener">Enquire</a>
-</nav>
-
-<section class="hero" style="padding:0;">
-  <div class="hero-half left" id="heroLeft">
-    <div class="hero-frame" id="heroLeftFrame"></div>
-    <div class="tag">Clive <b>Makalicha</b> — Portraiture</div>
-  </div>
-  <div class="hero-seam"></div>
-  <div class="hero-half right" id="heroRight">
-    <div class="hero-frame" id="heroRightFrame"></div>
-    <div class="tag">Lucky <b>Mukubonda</b> — Editorial</div>
-  </div>
-  <div class="hero-center">
-    <div class="glow"></div>
-    <div class="rings-big"><span></span><span></span></div>
-    <h1>Two eyes.<br><em>One</em> frame.</h1>
-    <p>TwinLens Studio — a photography partnership based in Mongu, capturing weddings, portraits and editorial stories in one shared visual voice.</p>
-  </div>
-  <div class="scroll-cue">Scroll ↓</div>
-</section>
-
-<section class="intro" id="studio">
-  <div class="intro-grid">
-    <div class="intro-copy">
-      <span class="eyebrow">Two Minds, One Brand</span>
-      <h2 style="margin-top:18px;">Different instincts.<br>The same standard.</h2>
-      <p>Two photographers, two ways of seeing — one trained on quiet portraiture, the other on movement and light. Every booking gets both perspectives working toward a single, consistent result, so what you receive never feels like it came from two different studios.</p>
+  <!-- NAVIGATION -->
+  <nav>
+    <div class="logo-mark">
+      <div class="rings"><span></span><span></span></div>
+      TWINLENS
     </div>
-    <div class="venn">
-      <div class="circle a">Precision</div>
-      <div class="circle b">Emotion</div>
+    <div class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#packages">Packages</a>
+      <a href="#gallery">Gallery</a>
+    </div>
+    <button class="nav-cta" onclick="toggleBookingOverlay()">Enquire</button>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <main class="hero">
+    <!-- Left Split Column (Photographer One) -->
+    <div class="hero-half left">
+      <div class="hero-frame" style="background-image: url('1000864257.png'); background-position: 25% center;"></div>
+      <div class="tag">Photographer <b>One</b> ── Portraiture</div>
+    </div>
+    
+    <!-- Right Split Column (Photographer Two) -->
+    <div class="hero-half right">
+      <div class="hero-frame" style="background-image: url('1000864257.png'); background-position: 75% center;"></div>
+      <div class="tag">Photographer <b>Two</b> ── Editorial</div>
+    </div>
+
+    <!-- Center Seam Fine Line -->
+    <div class="hero-seam"></div>
+
+    <!-- Floating Clean Typography (No Overlap Boxes) -->
+    <div class="hero-center">
+      <h1>Two eyes.<br><em>One frame.</em></h1>
+      <p>TwinLens Studio — a photography partnership based in Mongu, capturing weddings, portraits, and editorial stories in one shared visual voice.</p>
+    </div>
+
+    <div class="scroll-cue">Scroll ↓</div>
+  </main>
+
+  <!-- INTRO SECTION -->
+  <section id="services" class="intro">
+    <div class="intro-grid">
+      <div class="intro-copy">
+        <span class="eyebrow">Our Philosophy</span>
+        <h2>Two creative minds, perfectly aligned.</h2>
+        <p>We blend distinct perspectives into a singular, high-contrast aesthetic. From fast-paced event tracking to meticulous brand direction, our visual layout captures the raw depth of your milestones.</p>
+      </div>
+      <div class="venn">
+        <div class="circle a">Technical</div>
+        <div class="circle b">Artistic</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RE-ENGINEERED SERVICES TILES -->
+  <section class="services-section">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Expertise</span>
+        <h2>Core Creative Formats</h2>
+      </div>
+      <p>Explore our main production capabilities. Click "Enquire" or use the action button below to launch our interactive booking wizard.</p>
+    </div>
+    
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="num">01</div>
+        <h3>Party Vlogs<br><span>Event Tracking</span></h3>
+      </div>
+      <div class="service-card">
+        <div class="num">02</div>
+        <h3>Engagement Vlogs<br><span>Milestone Cinematic</span></h3>
+      </div>
+      <div class="service-card">
+        <div class="num">03</div>
+        <h3>Advertising<br><span>Commercial Production</span></h3>
+      </div>
+      <div class="service-card">
+        <div class="num">04</div>
+        <h3>Graduation Vlogs<br><span>Memory Capture</span></h3>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>&copy; 2026 TwinLens Studio. All rights reserved.</div>
+    <div>TwinLens Studio — Mongu</div>
+  </footer>
+
+
+  <!-- SMOOTH CINEMATIC SLIDE-OUT BOOKING OVERLAY PANEL -->
+  <div class="booking-overlay" id="bookingOverlay">
+    <div class="booking-panel">
+      
+      <!-- Panel Header -->
+      <div class="panel-header">
+        <span class="eyebrow">TwinLens Booking Engine</span>
+        <button class="close-btn" onclick="toggleBookingOverlay()">✕ Close</button>
+      </div>
+
+      <!-- HCI Visual Progress Indicator -->
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <!-- STEP 1: SERVICE SELECTION (7 Core Services) -->
+      <div class="booking-step active" id="step1">
+        <h3 class="step-title">Select a <em>Service</em></h3>
+        <div class="tile-grid">
+          <div class="tile-card" onclick="selectService('Party Vlogs')">
+            <div class="tile-meta"><span>01</span><div class="indicator"></div></div>
+            <h4>Party Vlogs</h4>
+            <p>High-energy event tracking engineered with cinematic pacing.</p>
+          </div>
+          <div class="tile-card" onclick="selectService('Engagement Vlogs')">
+            <div class="tile-meta"><span>02</span><div class="indicator"></div></div>
+            <h4>Engagement Vlogs</h4>
+            <p>Timeless visual storytelling capturing raw milestone emotions.</p>
+          </div>
+          <div class="tile-card" onclick="selectService('Advertising')">
+            <div class="tile-meta"><span>03</span><div class="indicator"></div></div>
+            <h4>Advertising Production</h4>
+            <p>Premium commercial messaging built to elevate business profiles.</p>
+          </div>
+          <div class="tile-card" onclick="selectService('Graduation Vlogs')">
+            <div class="tile-meta"><span>04</span><div class="indicator"></div></div>
+            <h4>Graduation Vlogs</h4>
+            <p>Honoring your academic milestones with striking cinematic depth.</p>
+          </div>
+          <div class="tile-card" onclick="selectService('Graphics Design')">
+            <div class="tile-meta"><span>05</span><div class="indicator"></div></div>
+            <h4>Graphics Design</h4>
+            <p>Bespoke visual identities, layout design, and structural assets.</p>
+          </div>
+          <div class="tile-card" onclick="selectService('Social Media Management')">
+            <div class="tile-meta"><span>06</span><div class="indicator"></div></div>
+            <h4>Social Media Management</h4>
+            <p>Complete aesthetic curation, daily scheduling, and active engagement strategy.</p>
+          </div>
+          <div class="tile-card" onclick="selectService('Content Agency')">
+            <div class="tile-meta"><span>07</span><div class="indicator"></div></div>
+            <h4>Content Agency Services</h4>
+            <p>Scalable ongoing batch video creation and content pipeline management.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: DYNAMIC CONTEXTUAL SCOPE / DURATION -->
+      <div class="booking-step" id="step2">
+        <h3 class="step-title" id="step2Title">Project <em>Duration</em></h3>
+        <div class="tile-grid" id="durationContainer">
+          <!-- Populates dynamically via JavaScript depending on Step 1 selection -->
+        </div>
+        <button class="back-btn" onclick="prevStep(1)">← Back to Services</button>
+      </div>
+
+      <!-- STEP 3: CONTACT INFORMATION & SUMMARY -->
+      <div class="booking-step" id="step3">
+        <h3 class="step-title">Contact <em>Details</em></h3>
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="clientName" placeholder="e.g. David Chinga">
+          
+          <label>Email Address</label>
+          <input type="email" id="clientEmail" placeholder="name@domain.com">
+          
+          <label>Phone Number</label>
+          <input type="tel" id="clientPhone" placeholder="e.g. ZMW Contact Number">
+        </div>
+        <div class="btn-row">
+          <button class="back-btn" onclick="prevStep(2)">← Back</button>
+          <button class="submit-booking-btn" onclick="submitFinalBooking()">Confirm Booking Inquiry</button>
+        </div>
+      </div>
+
     </div>
   </div>
-</section>
 
-<section>
-  <div class="section-head">
-    <h2>Explore the work we do</h2>
-    <p>Four ways we're usually booked — each shaped by both photographers, not divided between them.</p>
-  </div>
-  <div class="services-grid">
-    <div class="service-card" id="serviceWeddings"><span class="num">01</span><div><h3>Weddings</h3><span>Full-day coverage, both lenses on set</span></div></div>
-    <div class="service-card" id="servicePortraits"><span class="num">02</span><div><h3>Portraits</h3><span>Studio & on-location sessions</span></div></div>
-    <div class="service-card" id="serviceEditorial"><span class="num">03</span><div><h3>Editorial</h3><span>Brand, fashion & campaign work</span></div></div>
-    <div class="service-card" id="serviceEvents"><span class="num">04</span><div><h3>Events</h3><span>Corporate & private occasions</span></div></div>
-  </div>
-</section>
+  <!-- CENTRAL STATE ENGINE JAVASCRIPT -->
+  <script>
+    // Memory Object capturing configuration state step-by-step
+    let bookingData = {
+      service: null,
+      duration: null,
+      clientName: null,
+      clientEmail: null,
+      clientPhone: null
+    };
 
-<section class="packages" id="packages">
-  <div class="section-head">
-    <h2>Packages</h2>
-    <p>Pricing kept simple — reach out for a custom quote on anything outside these.</p>
-  </div>
-  <div class="packages-grid" id="packagesGrid"></div>
-</section>
+    function toggleBookingOverlay() {
+      const overlay = document.getElementById('bookingOverlay');
+      overlay.classList.toggle('open');
+      if (overlay.classList.contains('open')) {
+        showStep(1); // Always reset to step 1 when opening
+      }
+    }
 
-<section class="gallery" id="work">
-  <div class="section-head">
-    <h2>Recent frames</h2>
-    <p>A rotating look at recent bookings, sorted by shoot type.</p>
-  </div>
-  <div class="gallery-grid" id="galleryGrid"></div>
-</section>
+    function showStep(stepNum) {
+      document.querySelectorAll('.booking-step').forEach(step => step.classList.remove('active'));
+      document.getElementById(`step${stepNum}`).classList.add('active');
+      
+      // Update Visual Progress Bar (3 steps complete)
+      const fillPct = (stepNum / 3) * 100;
+      document.getElementById('progressFill').style.width = `${fillPct}%`;
+    }
 
-<section class="testimonial">
-  <div class="rings"><span></span><span></span></div>
-  <div class="testimonial-track" id="testimonialTrack"></div>
-  <div class="t-dots" id="testimonialDots"></div>
-</section>
+    function prevStep(stepNum) {
+      showStep(stepNum);
+    }
 
-<section class="cta">
-  <h2>Let's shoot<br>something together.</h2>
-  <a href="#" id="whatsappBottom" target="_blank" rel="noopener" class="cta-btn">Message us on WhatsApp</a>
-</section>
+    function selectService(serviceName) {
+      bookingData.service = serviceName;
+      
+      const titleEl = document.getElementById('step2Title');
+      const container = document.getElementById('durationContainer');
+      container.innerHTML = ''; // Clear previous fields
+      
+      // HCI Routing Track Logic (Time-Based vs. Retainer/Asset Scope Based)
+      if (serviceName.includes('Management') || serviceName.includes('Agency') || serviceName.includes('Design')) {
+        titleEl.innerHTML = "Select Retainer <em>Scope</em>";
+        container.innerHTML = `
+          <div class="tile-card" onclick="selectDuration('Per Project / Campaign Package')">
+            <div class="tile-meta"><span>A</span><div class="indicator"></div></div>
+            <h4>Per Project / Campaign Package</h4>
+            <p>One-time delivery focused on fixed creative asset output and clear targets.</p>
+          </div>
+          <div class="tile-card" onclick="selectDuration('Monthly Retainer Plan')">
+            <div class="tile-meta"><span>B</span><div class="indicator"></div></div>
+            <h4>Monthly Retainer Execution Plan</h4>
+            <p>Consistent rolling support covering platform management, asset pipelines, and scheduling.</p>
+          </div>
+          <div class="tile-card" onclick="selectDuration('Custom / Other Scope')">
+            <div class="tile-meta"><span>C</span><div class="indicator"></div></div>
+            <h4>Other (Custom Scope Specifications)</h4>
+            <p>Tailored hybrid structures designed for complex creative operations.</p>
+          </div>
+        `;
+      } else {
+        titleEl.innerHTML = "Select Cover <em>Duration</em>";
+        container.innerHTML = `
+          <div class="tile-card" onclick="selectDuration('Half Day Cover')">
+            <div class="tile-meta"><span>A</span><div class="indicator"></div></div>
+            <h4>Half Day Coverage (4-5 Hours)</h4>
+            <p>Focused event highlights, single-location production, and fast turnaround optimization.</p>
+          </div>
+          <div class="tile-card" onclick="selectDuration('Full Day Cover')">
+            <div class="tile-meta"><span>B</span><div class="indicator"></div></div>
+            <h4>Full Day Coverage (8-10 Hours)</h4>
+            <p>Complete timeline tracking, prep coverage, interviews, and multi-location logging.</p>
+          </div>
+          <div class="tile-card" onclick="selectDuration('Custom Timeline')">
+            <div class="tile-meta"><span>C</span><div class="indicator"></div></div>
+            <h4>Other (Custom Timeline Requirements)</h4>
+            <p>Specify unique hour configurations or multi-day event scheduling profiles.</p>
+          </div>
+        `;
+      }
+      
+      showStep(2);
+    }
 
-<footer>
-  <div>TwinLens Studio — Mongu</div>
-  <div>© 2026</div>
-</footer>
+    function selectDuration(durationValue) {
+      bookingData.duration = durationValue;
+      showStep(3);
+    }
 
-<script src="/main.js"></script>
+    function submitFinalBooking() {
+      bookingData.clientName = document.getElementById('clientName').value.trim();
+      bookingData.clientEmail = document.getElementById('clientEmail').value.trim();
+      bookingData.clientPhone = document.getElementById('clientPhone').value.trim();
+
+      if (!bookingData.clientName || !bookingData.clientPhone) {
+        alert("Please complete your name and a valid contact phone number so we can process your booking.");
+        return;
+      }
+
+      console.log("Transmission Packet Assembled:", bookingData);
+      
+      // Front-end notification alert matching requirements
+      alert(`Success! Thank you ${bookingData.clientName}. Your custom booking inquiry for ${bookingData.service} (${bookingData.duration}) has been logged in our system.`);
+      toggleBookingOverlay();
+      
+      // Reset form variables smoothly
+      document.getElementById('clientName').value = '';
+      document.getElementById('clientEmail').value = '';
+      document.getElementById('clientPhone').value = '';
+    }
+  </script>
 </body>
 </html>

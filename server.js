@@ -34,12 +34,51 @@ app.post('/api/admin/login', (req, res) => {
   res.json({ token });
 });
 
-// Public config for Cloudinary widget (no secrets — cloud name + unsigned preset are safe to expose)
+// Public config for Cloudinary widget
 app.get('/api/config', (req, res) => {
   res.json({
     cloudName: process.env.CLOUDINARY_CLOUD_NAME || '',
     uploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET || ''
   });
+});
+
+// ---------- CLIENT BOOKING ENGINE ENDPOINTS ----------
+app.post('/api/bookings', async (req, res) => {
+  const { client_name, client_phone, client_email, service_id, layout_label, calculated_cost, custom_notes } = req.body;
+  if (!client_name || !client_phone || !service_id) {
+    return res.status(400).json({ error: 'Name, contact phone, and service selection parameters are required.' });
+  }
+  try {
+    const { rows } = await pool.query(
+      `INSERT INTO bookings (client_name, client_phone, client_email, service_id, layout_label, calculated_cost, custom_notes)
+       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+      [client_name, client_phone, client_email || '', service_id, layout_label || 'Standard Layout', calculated_cost || 'Quote Pending', custom_notes || '']
+    );
+    res.json(rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server database failure saving inquiry record.' });
+  }
+});
+
+app.get('/api/bookings', requireAuth, async (req, res) => {
+  try {
+    const { rows } = await pool.query('SELECT * FROM bookings ORDER BY created_at DESC');
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server database failure retrieving pipeline logs.' });
+  }
+});
+
+app.delete('/api/bookings/:id', requireAuth, async (req, res) => {
+  try {
+    await pool.query('DELETE FROM bookings WHERE id = $1', [req.params.id]);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server failed to remove client ledger slot.' });
+  }
 });
 
 // ---------- SETTINGS (hero images) ----------
@@ -142,3 +181,4 @@ migrate()
     console.error('Failed to run migrations', err);
     process.exit(1);
   });
+    

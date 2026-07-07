@@ -40,12 +40,41 @@
     <div class="hero-seam"></div>
 
     <div class="hero-center">
-      <h1>Two Heads.<br><em>One Brand.</em></h1>
+      <h1>Two eyes.<br><em>One frame.</em></h1>
       <p>TwinLens Studio — a photography partnership based in Mongu, capturing weddings, portraits, and editorial stories in one shared visual voice.</p>
     </div>
 
     <div class="scroll-cue">Scroll ↓</div>
   </main>
+
+  <!-- MEET THE FOUNDERS -->
+  <section class="founders-section">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">The Studio</span>
+        <h2>Meet the Founders</h2>
+      </div>
+      <p>Two photographers, one shared frame. Get to know the eyes behind TwinLens.</p>
+    </div>
+
+    <div class="founders-grid">
+      <div class="founder-card">
+        <div class="founder-photo-frame ring-gold" data-img-key="founder_1_photo"></div>
+        <h3>Clive Makalicha</h3>
+        <span class="founder-role">Photographer &amp; Co-Founder</span>
+        <p>Clive leads with a technical eye — precise framing, clean light, and a steady hand under pressure. He's the one making sure every shot is sharp before it's ever called beautiful.</p>
+        <a class="founder-line" href="tel:+260977750399">📞 +260 977 750 399</a>
+      </div>
+
+      <div class="founder-card">
+        <div class="founder-photo-frame ring-bone" data-img-key="founder_2_photo"></div>
+        <h3>Lucky Mukubonda</h3>
+        <span class="founder-role">Photographer &amp; Co-Founder</span>
+        <p>Lucky brings the artistic instinct — reading a room, chasing a fleeting moment, and finding the emotion inside the frame. He's the reason your gallery feels like a story, not just a set of photos.</p>
+        <a class="founder-line" href="tel:+260779880167">📞 +260 779 880 167</a>
+      </div>
+    </div>
+  </section>
 
   <!-- INTRO SECTION -->
   <section id="services" class="intro">
@@ -153,6 +182,10 @@
   <!-- FOOTER -->
   <footer>
     <div>&copy; 2026 TwinLens Studio. All rights reserved.</div>
+    <div class="footer-contacts">
+      <a href="tel:+260977750399">Clive — +260 977 750 399</a>
+      <a href="tel:+260779880167">Lucky — +260 779 880 167</a>
+    </div>
     <div>TwinLens Studio — Mongu</div>
   </footer>
 
@@ -222,6 +255,34 @@
 
         <div class="form-group">
           <!-- Conditional Input Area (Drops down automatically for custom choices) -->
+          <div id="customNotesField" style="display: none; margin-bottom: 20px;">
+            <label style="color: var(--gold); margin-bottom: 8px;">Describe your custom project requirements</label>
+            <textarea id="clientNotes" placeholder="Provide details here (e.g., location changes, unique graphic requests, or asset files needed)..."></textarea>
+          </div>
+
+          <label>Your Name</label>
+          <input type="text" id="clientName" placeholder="e.g. David Chinga">
+          
+          <label>Email Address</label>
+          <input type="email" id="clientEmail" placeholder="name@domain.com">
+          
+          <label>Phone Number</label>
+          <input type="tel" id="clientPhone" placeholder="e.g. 0971234567">
+        </div>
+        
+        <div class="btn-row">
+          <button class="back-btn" onclick="prevStep(2)">← Back</button>
+          <button class="submit-booking-btn" onclick="submitFinalBooking()">Confirm Booking Inquiry</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="/main.js"></script>
+</body>
+  </html>
+<!-- Conditional Input Area (Drops down automatically for custom choices) -->
           <div id="customNotesField" style="display: none; margin-bottom: 20px;">
             <label style="color: var(--gold); margin-bottom: 8px;">Describe your custom project requirements</label>
             <textarea id="clientNotes" placeholder="Provide details here (e.g., location changes, unique graphic requests, or asset files needed)..."></textarea>

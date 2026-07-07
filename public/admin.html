@@ -24,15 +24,19 @@
   <div class="logo-mark"><div class="rings"><span></span><span></span></div>TWINLENS ADMIN</div>
 
   <div class="tabs" style="margin-top:40px;">
-    <div class="tab active" data-tab="hero">Hero</div>
+    <div class="tab active" data-tab="bookings">Inquiries</div>
+    <div class="tab" data-tab="hero">Hero</div>
     <div class="tab" data-tab="services">Services</div>
     <div class="tab" data-tab="gallery">Gallery</div>
     <div class="tab" data-tab="testimonials">Testimonials</div>
     <div class="tab" data-tab="packages">Packages</div>
   </div>
 
-  <!-- HERO TAB -->
-  <div class="tab-panel active" id="tab-hero">
+  <div class="tab-panel active" id="tab-bookings">
+    <div id="bookingList"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-hero">
     <div class="admin-form">
       <label>Clive (left side of hero)</label>
       <div id="heroLeftPreview" style="width:100%;aspect-ratio:16/9;background-size:cover;background-position:center;background-color:var(--ink);border:1px solid var(--line);margin-top:8px;"></div>
@@ -46,7 +50,6 @@
     <div class="small-note" id="heroStatus"></div>
   </div>
 
-  <!-- SERVICES TAB -->
   <div class="tab-panel" id="tab-services">
     <div class="admin-form">
       <label>Weddings</label>
@@ -71,7 +74,6 @@
     <div class="small-note" id="servicesStatus"></div>
   </div>
 
-  <!-- GALLERY TAB -->
   <div class="tab-panel" id="tab-gallery">
     <div class="admin-form">
       <label>Name (optional)</label>
@@ -84,7 +86,6 @@
     <div id="galleryList"></div>
   </div>
 
-  <!-- TESTIMONIALS TAB -->
   <div class="tab-panel" id="tab-testimonials">
     <form class="admin-form" id="testimonialForm">
       <label>Quote</label>
@@ -98,7 +99,6 @@
     <div id="testimonialList"></div>
   </div>
 
-  <!-- PACKAGES TAB -->
   <div class="tab-panel" id="tab-packages">
     <form class="admin-form" id="packageForm">
       <label>Package name</label>
@@ -116,10 +116,6 @@
     <div id="packageList"></div>
   </div>
 </div>
-
-<script src="/admin.js"></script>
-</body>
-</html>
 
 <script src="/admin.js"></script>
 </body>

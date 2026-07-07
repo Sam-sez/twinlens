@@ -25,6 +25,7 @@ function showLogin() {
 function showDashboard() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
+  loadBookingsAdmin();
   loadHeroAdmin();
   loadServicesAdmin();
   loadGalleryAdmin();
@@ -70,9 +71,62 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
-// ---------- CLOUDINARY (shared widget, target tracked by a variable) ----------
+// ---------- CLIENT ACTIVE INQUIRIES LOGS ----------
+async function loadBookingsAdmin() {
+  const res = await apiFetch('/api/bookings');
+  const items = await res.json();
+  const list = document.getElementById('bookingList');
+  list.innerHTML = '';
+  
+  if (items.length === 0) {
+    list.innerHTML = `<p style="color:var(--stone); font-family:'JetBrains Mono'; padding:24px; font-size:14px;">No incoming inquiries logged in the tracking pipeline yet.</p>`;
+    return;
+  }
+
+  items.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'admin-list-item';
+    row.style.flexDirection = 'column';
+    row.style.alignItems = 'stretch';
+    row.style.gap = '14px';
+    row.style.padding = '24px';
+    row.style.marginBottom = '16px';
+    row.style.background = 'var(--panel-2)';
+    
+    const timestamp = new Date(item.created_at).toLocaleString();
+
+    row.innerHTML = `
+      <div style="display:flex; justify-content:between; align-items:flex-start; border-bottom:1px solid var(--line); padding-bottom:12px; width:100%;">
+        <div style="flex-grow:1;">
+          <h4 style="font-size:20px; color:var(--bone); margin:0;">${item.client_name}</h4>
+          <p style="color:var(--gold); font-family:'JetBrains Mono'; font-size:12px; margin:4px 0 0 0; text-transform:uppercase; letter-spacing:0.04em;">${item.service_id} — ${item.layout_label}</p>
+        </div>
+        <strong style="color:var(--bone); font-family:'JetBrains Mono'; font-size:16px; white-space:nowrap; margin-left:16px;">${item.calculated_cost}</strong>
+      </div>
+      <div style="font-size:14px; color:var(--stone); line-height:1.6; width:100%;">
+        <p style="margin:4px 0;">📱 Line: <a href="tel:${item.client_phone}" style="color:var(--gold); text-decoration:none; font-weight:600;">${item.client_phone}</a></p>
+        ${item.client_email ? `<p style="margin:4px 0;">✉️ Email: ${item.client_email}</p>` : ''}
+        ${item.custom_notes ? `<div style="background:rgba(212,162,76,0.06); border-left:3px solid var(--gold); padding:12px; margin-top:10px; font-size:13px; color:var(--bone); border-radius:0 4px 4px 0;"><b>Custom Requirements:</b><br>${item.custom_notes}</div>` : ''}
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; width:100%;">
+        <span style="font-size:11px; color:var(--stone); font-family:'JetBrains Mono';">${timestamp}</span>
+        <button class="btn-delete" data-id="${item.id}" style="margin:0; padding:6px 14px; font-size:11px;">Archive Log</button>
+      </div>
+    `;
+
+    row.querySelector('.btn-delete').addEventListener('click', async () => {
+      if(confirm("Archive this client lead from workspace logs?")) {
+        await apiFetch('/api/bookings/' + item.id, { method: 'DELETE', headers: authHeaders() });
+        loadBookingsAdmin();
+      }
+    });
+    list.appendChild(row);
+  });
+}
+
+// ---------- CLOUDINARY (shared widget) ----------
 let cloudinaryWidget = null;
-let uploadTarget = 'gallery'; // 'gallery' | 'hero_left' | 'hero_right'
+let uploadTarget = 'gallery';
 
 async function initCloudinary() {
   const res = await fetch('/api/config');
@@ -304,4 +358,4 @@ if (getToken()) {
   showLogin();
 }
 initCloudinary();
-                                         
+    

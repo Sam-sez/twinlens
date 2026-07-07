@@ -520,4 +520,54 @@ footer { padding: 40px 6%; display: flex; justify-content: space-between; align-
   .admin-body { padding: 32px 5% 80px; }
   .admin-login { margin-top: 8vh; padding: 36px 24px; }
   .admin-list-item { flex-direction: column; align-items: stretch; }
-                          }
+}
+
+/* ==========================================================================
+   MEET THE FOUNDERS
+   ========================================================================== */
+
+.founders-section { background: var(--ink); border-top: 1px solid var(--line); }
+
+.founders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 56px;
+  margin-top: 8px;
+}
+
+.founder-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.founder-photo-frame {
+  width: 152px;
+  height: 152px;
+  border-radius: 50%;
+  background-color: var(--panel-2);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  margin-bottom: 28px;
+}
+.founder-photo-frame::before {
+  content: '';
+  position: absolute;
+  inset: -9px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold);
+}
+.founder-photo-frame.ring-bone::before { border-color: var(--bone); }
+
+.founder-card h3 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 400; color: var(--bone); }
+.founder-role {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gold);
+  margin: 8px 0 16px;
+}
+.founder-card p { color: var(--stone); font-size: 14

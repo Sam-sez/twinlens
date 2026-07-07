@@ -27,6 +27,7 @@ function showDashboard() {
   document.getElementById('dashboard').style.display = 'block';
   loadBookingsAdmin();
   loadHeroAdmin();
+  loadFoundersAdmin();
   loadServicesAdmin();
   loadGalleryAdmin();
   loadTestimonialsAdmin();
@@ -158,6 +159,20 @@ async function initCloudinary() {
         } catch (e) {
           statusEl.textContent = 'Could not save photo.';
         }
+      } else if (uploadTarget === 'founder_1_photo' || uploadTarget === 'founder_2_photo') {
+        const statusEl = document.getElementById('foundersStatus');
+        statusEl.textContent = 'Saving...';
+        try {
+          await apiFetch('/api/settings', {
+            method: 'POST',
+            headers: authHeaders(),
+            body: JSON.stringify({ key: uploadTarget, value: url })
+          });
+          statusEl.textContent = 'Saved.';
+          loadFoundersAdmin();
+        } catch (e) {
+          statusEl.textContent = 'Could not save photo.';
+        }
       } else if (uploadTarget.startsWith('service_')) {
         const statusEl = document.getElementById('servicesStatus');
         statusEl.textContent = 'Saving...';
@@ -213,6 +228,14 @@ document.getElementById('uploadHeroRightBtn').addEventListener('click', () => {
   else document.getElementById('heroStatus').textContent = 'Upload isn\'t set up yet.';
 });
 
+document.querySelectorAll('[data-founder]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    uploadTarget = btn.dataset.founder;
+    if (cloudinaryWidget) cloudinaryWidget.open();
+    else document.getElementById('foundersStatus').textContent = 'Upload isn\'t set up yet.';
+  });
+});
+
 document.querySelectorAll('[data-service]').forEach(btn => {
   btn.addEventListener('click', () => {
     uploadTarget = btn.dataset.service;
@@ -249,6 +272,16 @@ async function loadHeroAdmin() {
   const right = document.getElementById('heroRightPreview');
   if (settings.hero_left) left.style.backgroundImage = `url(${settings.hero_left})`;
   if (settings.hero_right) right.style.backgroundImage = `url(${settings.hero_right})`;
+}
+
+// ---------- FOUNDERS ----------
+async function loadFoundersAdmin() {
+  const res = await apiFetch('/api/settings');
+  const settings = await res.json();
+  const f1 = document.getElementById('founder1Preview');
+  const f2 = document.getElementById('founder2Preview');
+  if (settings.founder_1_photo && f1) f1.style.backgroundImage = `url(${settings.founder_1_photo})`;
+  if (settings.founder_2_photo && f2) f2.style.backgroundImage = `url(${settings.founder_2_photo})`;
 }
 
 // ---------- GALLERY ----------
@@ -360,4 +393,4 @@ if (getToken()) {
   showLogin();
 }
 initCloudinary();
-
+    

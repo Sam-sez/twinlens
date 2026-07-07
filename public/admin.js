@@ -73,7 +73,7 @@ document.querySelectorAll('.tab').forEach(tab => {
 
 // ---------- CLIENT ACTIVE INQUIRIES LOGS ----------
 async function loadBookingsAdmin() {
-  const res = await apiFetch('/api/bookings');
+  const res = await apiFetch('/api/bookings', { headers: authHeaders() });
   const items = await res.json();
   const list = document.getElementById('bookingList');
   list.innerHTML = '';
@@ -226,10 +226,12 @@ async function loadServicesAdmin() {
   const res = await apiFetch('/api/settings');
   const settings = await res.json();
   const map = {
-    service_weddings: 'serviceWeddingsPreview',
-    service_portraits: 'servicePortraitsPreview',
-    service_editorial: 'serviceEditorialPreview',
-    service_events: 'serviceEventsPreview'
+    service_party_vlogs: 'servicePartyVlogsPreview',
+    service_engagement_vlogs: 'serviceEngagementVlogsPreview',
+    service_advertising: 'serviceAdvertisingPreview',
+    service_graduation_vlogs: 'serviceGraduationVlogsPreview',
+    service_graphics_design: 'serviceGraphicsDesignPreview',
+    service_social_media: 'serviceSocialMediaPreview'
   };
   Object.entries(map).forEach(([key, id]) => {
     if (settings[key]) {
@@ -358,4 +360,4 @@ if (getToken()) {
   showLogin();
 }
 initCloudinary();
-    
+

@@ -26,6 +26,7 @@ let bookingData = {
 document.addEventListener('DOMContentLoaded', () => {
   initializeDynamicHero();
   initializeDynamicGallery();
+  initializeServiceImages();
 });
 
 /**
@@ -74,6 +75,24 @@ async function initializeDynamicGallery() {
     }
   } catch (err) {
     console.error('Failed to populate recent frames gallery engine:', err);
+  }
+}
+
+async function initializeServiceImages() {
+  try {
+    const res = await fetch('/api/settings');
+    if (!res.ok) return;
+    const settings = await res.json();
+
+    document.querySelectorAll('.service-card-image[data-img-key]').forEach(frame => {
+      const key = frame.dataset.imgKey;
+      if (settings[key]) {
+        frame.style.backgroundImage = `url('${settings[key]}')`;
+        frame.classList.add('has-image');
+      }
+    });
+  } catch (err) {
+    console.error('Failed to load service tile images:', err);
   }
 }
 

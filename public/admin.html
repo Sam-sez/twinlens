@@ -26,6 +26,7 @@
   <div class="tabs" style="margin-top:40px;">
     <div class="tab active" data-tab="bookings">Inquiries</div>
     <div class="tab" data-tab="hero">Hero</div>
+    <div class="tab" data-tab="founders">Founders</div>
     <div class="tab" data-tab="services">Services</div>
     <div class="tab" data-tab="gallery">Gallery</div>
     <div class="tab" data-tab="testimonials">Testimonials</div>
@@ -38,16 +39,30 @@
 
   <div class="tab-panel" id="tab-hero">
     <div class="admin-form">
-      <label> Founder</label>
+      <label>Clive (left side of hero)</label>
       <div id="heroLeftPreview" style="width:100%;aspect-ratio:16/9;background-size:cover;background-position:center;background-color:var(--ink);border:1px solid var(--line);margin-top:8px;"></div>
       <button type="button" class="upload-btn" id="uploadHeroLeftBtn">Upload / replace photo</button>
     </div>
     <div class="admin-form">
-      <label>Founder</label>
+      <label>Manduna (right side of hero)</label>
       <div id="heroRightPreview" style="width:100%;aspect-ratio:16/9;background-size:cover;background-position:center;background-color:var(--ink);border:1px solid var(--line);margin-top:8px;"></div>
       <button type="button" class="upload-btn" id="uploadHeroRightBtn">Upload / replace photo</button>
     </div>
     <div class="small-note" id="heroStatus"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-founders">
+    <div class="admin-form">
+      <label>Clive Makalicha</label>
+      <div id="founder1Preview" style="width:152px;height:152px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--ink);border:1px solid var(--line);margin-top:8px;"></div>
+      <button type="button" class="upload-btn" data-founder="founder_1_photo">Upload / replace photo</button>
+    </div>
+    <div class="admin-form">
+      <label>Lucky Mukubonda</label>
+      <div id="founder2Preview" style="width:152px;height:152px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--ink);border:1px solid var(--line);margin-top:8px;"></div>
+      <button type="button" class="upload-btn" data-founder="founder_2_photo">Upload / replace photo</button>
+    </div>
+    <div class="small-note" id="foundersStatus"></div>
   </div>
 
   <div class="tab-panel" id="tab-services">

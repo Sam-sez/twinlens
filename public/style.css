@@ -46,7 +46,7 @@ a {
   text-decoration: none;
 }
 
-/* NAVIGATION SETUP */
+/* NAVIGATION ARCHITECTURE */
 nav {
   position: fixed;
   top: 0;
@@ -113,7 +113,7 @@ nav {
 
 @media(max-width: 720px) { .nav-links { display: none; } }
 
-/* HERO - CLEAN SPLIT PORTRAIT FRAME COLUMNS */
+/* HERO SEAM PORTRAIT DUO OVERLAYS */
 .hero {
   position: relative;
   min-height: 100vh;
@@ -139,7 +139,7 @@ nav {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(11,11,10,0.15) 0%, rgba(11,11,10,0.6) 100%);
+  background: linear-gradient(180deg, rgba(11,11,10,0.15) 0%, rgba(11,11,10,0.65) 100%);
   z-index: 2;
   pointer-events: none;
 }
@@ -223,13 +223,13 @@ nav {
   .hero-half { height: 85vh; padding: 100px 16px 40px; }
 }
 
-/* CONTENT BLOCK BASICS */
+/* SECTION SPECIFICATIONS GENERAL */
 section { padding: 120px 6%; position: relative; }
 .section-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; margin-bottom: 64px; flex-wrap: wrap; }
 .section-head h2 { font-size: clamp(28px, 3.6vw, 44px); max-width: 560px; }
 .section-head p { color: var(--stone); max-width: 360px; font-size: 14px; line-height: 1.7; }
 
-/* PHILOSOPHY LAYOUT */
+/* PHILOSOPHY LAYOUT CONFIGS */
 .intro { background: var(--panel); }
 .intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
 .intro-copy h2 { font-size: clamp(30px, 4vw, 48px); line-height: 1.15; margin-bottom: 24px; }
@@ -241,7 +241,7 @@ section { padding: 120px 6%; position: relative; }
 
 @media(max-width: 820px) { .intro-grid { grid-template-columns: 1fr; } .venn { height: 220px; } .venn .circle { width: 160px; height: 160px; } .venn .circle.a { left: calc(50% - 130px); } .venn .circle.b { left: calc(50% - 30px); } }
 
-/* STATIC DISCLOSURE SERVICES TILES */
+/* INTERACTIVE HOME GRID CARDS MAPS */
 .services-section { background: var(--ink); border-top: 1px solid var(--line); }
 .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
 .service-card { background: var(--panel-2); border: 1px solid var(--line); padding: 40px 28px; min-height: 240px; display: flex; flex-direction: column; justify-content: space-between; border-radius: 6px; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -251,7 +251,7 @@ section { padding: 120px 6%; position: relative; }
 .service-card h3 span { font-size: 13px; color: var(--stone); display: block; margin-top: 8px; font-family: 'Manrope', sans-serif; }
 .service-card .price-tag { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--gold); margin-top: 16px; }
 
-/* SWIPABLE PORTFOLIO GALLERY TRACK */
+/* HORIZONTAL PORTFOLIO SCROLL TRACKS */
 .recent-frames-section { background: var(--panel); border-top: 1px solid var(--line); overflow: hidden; }
 .gallery-container { width: 100%; overflow-x: auto; padding-bottom: 20px; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; }
 .gallery-container::-webkit-scrollbar { height: 4px; }
@@ -263,15 +263,15 @@ section { padding: 120px 6%; position: relative; }
 
 @media(max-width: 600px) { .gallery-item { min-width: 260px; height: 340px; } }
 
-/* CLASSIC FOOTER HIGH CONTRAST CTAS */
+/* PREMIUM HIGH-CONTRAST SHOOT CALL BUTTON */
 .footer-cta-container { display: flex; justify-content: center; margin-top: 64px; }
 .shoot-with-us-btn { background: var(--gold); color: var(--ink); font-family: 'Manrope', sans-serif; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; border: none; padding: 18px 36px; border-radius: 4px; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 10px 30px rgba(212, 162, 76, 0.15); }
 .shoot-with-us-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(212, 162, 76, 0.3); opacity: 0.95; }
 
-/* FOOTER LOGISTICS */
+/* FOOTER ARCHITECTURE SETUP */
 footer { padding: 40px 6%; display: flex; justify-content: space-between; align-items: center; color: var(--stone); font-size: 12px; flex-wrap: wrap; gap: 16px; border-top: 1px solid var(--line); background: var(--ink); }
 
-/* INTERACTIVE MODAL OVERLAY PANEL MODULES */
+/* OVERLAY FRAME COMPONENT MODALS */
 .booking-overlay { position: fixed; inset: 0; background: rgba(11, 11, 10, 0.65); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 1000; display: flex; justify-content: flex-end; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
 .booking-overlay.open { opacity: 1; pointer-events: auto; }
 .booking-panel { width: 100%; max-width: 540px; background: var(--ink); height: 100vh; border-left: 1px solid var(--line); padding: 40px 32px; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); overflow-y: auto; }
@@ -280,7 +280,7 @@ footer { padding: 40px 6%; display: flex; justify-content: space-between; align-
 .close-btn { background: transparent; border: none; color: var(--stone); font-family: 'JetBrains Mono', monospace; font-size: 12px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.08em; }
 .close-btn:hover { color: var(--gold); }
 
-/* Progress Meter elements */
+/* Progress meters */
 .progress-bar { width: 100%; height: 2px; background: var(--line); margin-bottom: 36px; border-radius: 2px; }
 .progress-fill { width: 33.3%; height: 100%; background: var(--gold); transition: width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .booking-step { display: none; flex-direction: column; flex: 1; }
@@ -288,7 +288,7 @@ footer { padding: 40px 6%; display: flex; justify-content: space-between; align-
 .step-title { font-size: 30px; margin-bottom: 24px; }
 .step-title em { font-style: italic; color: var(--gold); }
 
-/* Tile Grid Structure updates */
+/* Tile Cards Options Maps */
 .tile-grid { display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
 .tile-card { background: var(--panel-2); border: 1px solid var(--line); padding: 20px 24px; border-radius: 6px; cursor: pointer; transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .tile-card:hover { border-color: rgba(214, 162, 76, 0.5); transform: translateY(-2px); }
@@ -300,16 +300,23 @@ footer { padding: 40px 6%; display: flex; justify-content: space-between; align-
 .indicator { width: 12px; height: 12px; border: 1px solid var(--line); border-radius: 50%; transition: all 0.2s ease; }
 .tile-card:hover .indicator { border-color: var(--gold); }
 
-/* Form Control Inputs configuration */
+/* LIVE INVOICE RECEIPT BOX COMPONENT */
+.receipt-box { background: var(--panel); border: 1px dashed var(--line); padding: 18px 20px; border-radius: 6px; margin-bottom: 28px; display: flex; flex-direction: column; gap: 8px; }
+.receipt-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: var(--stone); }
+.receipt-row b { color: var(--bone); font-weight: 500; }
+.receipt-row.total { border-top: 1px dashed var(--line); margin-top: 6px; padding-top: 10px; font-size: 14px; color: var(--bone); }
+.receipt-row strong { color: var(--gold); font-family: 'JetBrains Mono', monospace; font-size: 16px; }
+
+/* Form Field Options Design */
 .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 32px; }
 .form-group label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--stone); margin-top: 16px; }
-.form-group input { padding: 13px 14px; background: var(--panel-2); border: 1px solid var(--line); color: var(--bone); font-family: inherit; font-size: 14px; border-radius: 4px; transition: border-color 0.2s ease; }
-.form-group input:focus { outline: none; border-color: var(--gold); }
+.form-group input, .form-group textarea { padding: 13px 14px; background: var(--panel-2); border: 1px solid var(--line); color: var(--bone); font-family: inherit; font-size: 14px; border-radius: 4px; transition: border-color 0.2s ease; }
+.form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--gold); }
+.form-group textarea { min-height: 90px; resize: vertical; }
 
-/* Controls layout buttons */
+/* Control Action Row Buttons Layout */
 .btn-row { display: flex; gap: 16px; align-items: center; }
 .back-btn { background: transparent; border: 1px solid var(--line); color: var(--stone); padding: 14px 22px; font-size: 13px; font-family: inherit; cursor: pointer; border-radius: 4px; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 0.04em; }
 .back-btn:hover { border-color: var(--bone); color: var(--bone); }
 .submit-booking-btn { flex: 1; background: var(--gold); color: var(--ink); border: none; padding: 14px 20px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; font-family: inherit; cursor: pointer; border-radius: 4px; transition: opacity 0.2s ease; }
 .submit-booking-btn:hover { opacity: 0.9; }
-                

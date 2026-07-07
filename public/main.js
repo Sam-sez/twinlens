@@ -124,7 +124,10 @@ function prevStep(stepNum) {
 function selectService(serviceName) {
   bookingData.service = serviceName;
   
-  toggleBookingOverlay(); // Ensures overlay opens if selected directly via page grid cards
+  const overlay = document.getElementById('bookingOverlay');
+  if (overlay && !overlay.classList.contains('open')) {
+    overlay.classList.add('open'); // Opens the panel if it isn't already open; never closes it
+  }
   
   const titleEl = document.getElementById('step2Title');
   const container = document.getElementById('durationContainer');

@@ -91,6 +91,13 @@ async function initializeServiceImages() {
         frame.classList.add('has-image');
       }
     });
+
+    document.querySelectorAll('.founder-photo-frame[data-img-key]').forEach(frame => {
+      const key = frame.dataset.imgKey;
+      if (settings[key]) {
+        frame.style.backgroundImage = `url('${settings[key]}')`;
+      }
+    });
   } catch (err) {
     console.error('Failed to load service tile images:', err);
   }

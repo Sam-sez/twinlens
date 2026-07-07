@@ -8,6 +8,7 @@ const pool = new Pool({
 });
 
 async function migrate() {
+  // Existing structural components
   await pool.query(`
     CREATE TABLE IF NOT EXISTS gallery (
       id SERIAL PRIMARY KEY,
@@ -17,7 +18,6 @@ async function migrate() {
       created_at TIMESTAMP DEFAULT NOW()
     );
   `);
-  // In case this is an existing DB from an earlier version, migrate its shape
   await pool.query(`ALTER TABLE gallery ADD COLUMN IF NOT EXISTS title TEXT;`);
   await pool.query(`ALTER TABLE gallery ADD COLUMN IF NOT EXISTS description TEXT;`);
   await pool.query(`ALTER TABLE gallery ALTER COLUMN category DROP NOT NULL;`).catch(() => {});
@@ -52,7 +52,23 @@ async function migrate() {
     );
   `);
 
-  // Seed default testimonials + packages if empty, so the site isn't blank on first launch
+  // NEW PIPELINE: Client Inquiries Lead Ledger
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS bookings (
+      id SERIAL PRIMARY KEY,
+      client_name TEXT NOT NULL,
+      client_phone TEXT NOT NULL,
+      client_email TEXT,
+      service_id TEXT NOT NULL,
+      layout_label TEXT NOT NULL,
+      calculated_cost TEXT NOT NULL,
+      custom_notes TEXT,
+      status TEXT DEFAULT 'pending',
+      created_at TIMESTAMP DEFAULT NOW()
+    );
+  `);
+
+  // Seed default testimonials + packages if empty
   const { rows: tRows } = await pool.query('SELECT COUNT(*)::int AS count FROM testimonials');
   if (tRows[0].count === 0) {
     await pool.query(`

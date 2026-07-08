@@ -172,6 +172,36 @@ app.delete('/api/packages/:id', requireAuth, async (req, res) => {
   res.json({ ok: true });
 });
 
+// ---------- SERVICES ----------
+app.get('/api/services', async (req, res) => {
+  const { rows } = await pool.query('SELECT * FROM services ORDER BY sort_order ASC, created_at ASC');
+  res.json(rows);
+});
+
+app.post('/api/services', requireAuth, async (req, res) => {
+  const { title, subtitle, price_label, image_url, sort_order } = req.body;
+  if (!title) return res.status(400).json({ error: 'title is required' });
+  const { rows } = await pool.query(
+    'INSERT INTO services (title, subtitle, price_label, image_url, sort_order) VALUES ($1,$2,$3,$4,$5) RETURNING *',
+    [title, subtitle || '', price_label || '', image_url || null, sort_order || 0]
+  );
+  res.json(rows[0]);
+});
+
+app.put('/api/services/:id', requireAuth, async (req, res) => {
+  const { title, subtitle, price_label, image_url, sort_order } = req.body;
+  const { rows } = await pool.query(
+    `UPDATE services SET title=$1, subtitle=$2, price_label=$3, image_url=$4, sort_order=$5 WHERE id=$6 RETURNING *`,
+    [title, subtitle || '', price_label || '', image_url || null, sort_order || 0, req.params.id]
+  );
+  res.json(rows[0]);
+});
+
+app.delete('/api/services/:id', requireAuth, async (req, res) => {
+  await pool.query('DELETE FROM services WHERE id = $1', [req.params.id]);
+  res.json({ ok: true });
+});
+
 // ---------- START ----------
 migrate()
   .then(() => {
@@ -181,4 +211,5 @@ migrate()
     console.error('Failed to run migrations', err);
     process.exit(1);
   });
-    
+
+  

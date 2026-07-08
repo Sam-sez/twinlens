@@ -173,16 +173,19 @@ async function initCloudinary() {
         } catch (e) {
           statusEl.textContent = 'Could not save photo.';
         }
-      } else if (uploadTarget.startsWith('service_')) {
-        const statusEl = document.getElementById('servicesStatus');
+      } else if (uploadTarget.startsWith('service:')) {
+        const id = uploadTarget.split(':')[1];
+        const statusEl = document.getElementById('servicesStatus') || { textContent: '' };
         statusEl.textContent = 'Saving...';
         try {
-          await apiFetch('/api/settings', {
-            method: 'POST',
-            headers: authHeaders(),
-            body: JSON.stringify({ key: uploadTarget, value: url })
-          });
-          statusEl.textContent = 'Saved.';
+          const existing = servicesCache.find(s => String(s.id) === String(id));
+          if (existing) {
+            await apiFetch('/api/services/' + id, {
+              method: 'PUT',
+              headers: authHeaders(),
+              body: JSON.stringify({ ...existing, image_url: url })
+            });
+          }
           loadServicesAdmin();
         } catch (e) {
           statusEl.textContent = 'Could not save photo.';
@@ -236,31 +239,67 @@ document.querySelectorAll('[data-founder]').forEach(btn => {
   });
 });
 
-document.querySelectorAll('[data-service]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    uploadTarget = btn.dataset.service;
-    if (cloudinaryWidget) cloudinaryWidget.open();
-    else document.getElementById('servicesStatus').textContent = 'Upload isn\'t set up yet.';
-  });
-});
+// Service photo-upload buttons are attached dynamically inside loadServicesAdmin(),
+// since services are now added/removed by the user rather than fixed in the HTML.
 
 // ---------- SERVICES ----------
-async function loadServicesAdmin() {
-  const res = await apiFetch('/api/settings');
-  const settings = await res.json();
-  const map = {
-    service_party_vlogs: 'servicePartyVlogsPreview',
-    service_engagement_vlogs: 'serviceEngagementVlogsPreview',
-    service_advertising: 'serviceAdvertisingPreview',
-    service_graduation_vlogs: 'serviceGraduationVlogsPreview',
-    service_graphics_design: 'serviceGraphicsDesignPreview',
-    service_social_media: 'serviceSocialMediaPreview'
+let servicesCache = [];
+
+document.getElementById('serviceForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const body = {
+    title: document.getElementById('sTitle').value,
+    subtitle: document.getElementById('sSubtitle').value,
+    price_label: document.getElementById('sPrice').value,
+    sort_order: servicesCache.length
   };
-  Object.entries(map).forEach(([key, id]) => {
-    if (settings[key]) {
-      const el = document.getElementById(id);
-      if (el) el.style.backgroundImage = `url(${settings[key]})`;
-    }
+  await apiFetch('/api/services', {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify(body)
+  });
+  e.target.reset();
+  loadServicesAdmin();
+});
+
+async function loadServicesAdmin() {
+  const res = await apiFetch('/api/services');
+  const items = await res.json();
+  servicesCache = items;
+  const list = document.getElementById('serviceList');
+  if (!list) return;
+  list.innerHTML = '';
+
+  items.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'admin-list-item';
+    row.innerHTML = `
+      <div class="row-left">
+        ${item.image_url ? `<img src="${item.image_url}" alt="${item.title}">` : `<div style="width:56px;height:56px;border-radius:4px;background:var(--panel);border:1px solid var(--line);flex-shrink:0;"></div>`}
+        <div class="text">
+          <p>${item.title}${item.price_label ? ' — ' + item.price_label : ''}</p>
+          <span class="meta">${item.subtitle || 'No subtitle set'}</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;flex-shrink:0;">
+        <button class="upload-btn photo-btn" style="padding:8px 14px;font-size:12px;margin-top:0;" data-id="${item.id}">Photo</button>
+        <button class="btn-delete" data-id="${item.id}">Delete</button>
+      </div>
+    `;
+    row.querySelector('.photo-btn').addEventListener('click', () => {
+      uploadTarget = 'service:' + item.id;
+      if (cloudinaryWidget) cloudinaryWidget.open();
+      else {
+        const statusEl = document.getElementById('servicesStatus');
+        if (statusEl) statusEl.textContent = 'Upload isn\'t set up yet.';
+      }
+    });
+    row.querySelector('.btn-delete').addEventListener('click', async () => {
+      if (!confirm(`Remove "${item.title}" from the site?`)) return;
+      await apiFetch('/api/services/' + item.id, { method: 'DELETE', headers: authHeaders() });
+      loadServicesAdmin();
+    });
+    list.appendChild(row);
   });
 }
 
@@ -275,6 +314,15 @@ async function loadHeroAdmin() {
 }
 
 // ---------- FOUNDERS ----------
+const FOUNDER_DEFAULTS = {
+  founder_1_name: 'Clive Makalicha',
+  founder_1_role: 'Photographer & Co-Founder',
+  founder_1_bio: "Clive leads with a technical eye — precise framing, clean light, and a steady hand under pressure. He's the one making sure every shot is sharp before it's ever called beautiful.",
+  founder_2_name: 'Lucky Mukubonda',
+  founder_2_role: 'Photographer & Co-Founder',
+  founder_2_bio: "Lucky brings the artistic instinct — reading a room, chasing a fleeting moment, and finding the emotion inside the frame. He's the reason your gallery feels like a story, not just a set of photos."
+};
+
 async function loadFoundersAdmin() {
   const res = await apiFetch('/api/settings');
   const settings = await res.json();
@@ -282,7 +330,49 @@ async function loadFoundersAdmin() {
   const f2 = document.getElementById('founder2Preview');
   if (settings.founder_1_photo && f1) f1.style.backgroundImage = `url(${settings.founder_1_photo})`;
   if (settings.founder_2_photo && f2) f2.style.backgroundImage = `url(${settings.founder_2_photo})`;
+
+  document.getElementById('f1Name').value = settings.founder_1_name || FOUNDER_DEFAULTS.founder_1_name;
+  document.getElementById('f1Role').value = settings.founder_1_role || FOUNDER_DEFAULTS.founder_1_role;
+  document.getElementById('f1Bio').value = settings.founder_1_bio || FOUNDER_DEFAULTS.founder_1_bio;
+  document.getElementById('f2Name').value = settings.founder_2_name || FOUNDER_DEFAULTS.founder_2_name;
+  document.getElementById('f2Role').value = settings.founder_2_role || FOUNDER_DEFAULTS.founder_2_role;
+  document.getElementById('f2Bio').value = settings.founder_2_bio || FOUNDER_DEFAULTS.founder_2_bio;
 }
+
+async function saveFounderFields(prefix, fields) {
+  const statusEl = document.getElementById('foundersStatus');
+  statusEl.textContent = 'Saving...';
+  try {
+    for (const [key, value] of Object.entries(fields)) {
+      await apiFetch('/api/settings', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ key: `${prefix}_${key}`, value })
+      });
+    }
+    statusEl.textContent = 'Saved.';
+  } catch (e) {
+    statusEl.textContent = 'Could not save.';
+  }
+}
+
+document.getElementById('founder1Form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  saveFounderFields('founder_1', {
+    name: document.getElementById('f1Name').value,
+    role: document.getElementById('f1Role').value,
+    bio: document.getElementById('f1Bio').value
+  });
+});
+
+document.getElementById('founder2Form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  saveFounderFields('founder_2', {
+    name: document.getElementById('f2Name').value,
+    role: document.getElementById('f2Role').value,
+    bio: document.getElementById('f2Bio').value
+  });
+});
 
 // ---------- GALLERY ----------
 async function loadGalleryAdmin() {
@@ -393,4 +483,5 @@ if (getToken()) {
   showLogin();
 }
 initCloudinary();
+
     

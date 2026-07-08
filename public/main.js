@@ -26,7 +26,8 @@ let bookingData = {
 document.addEventListener('DOMContentLoaded', () => {
   initializeDynamicHero();
   initializeDynamicGallery();
-  initializeServiceImages();
+  initializeServices();
+  initializeFounderPhotos();
 });
 
 /**
@@ -78,19 +79,35 @@ async function initializeDynamicGallery() {
   }
 }
 
-async function initializeServiceImages() {
+async function initializeServices() {
+  const grid = document.getElementById('servicesGrid');
+  if (!grid) return;
+  try {
+    const res = await fetch('/api/services');
+    if (!res.ok) return;
+    const services = await res.json();
+
+    grid.innerHTML = services.map((svc, i) => `
+      <div class="service-card" onclick="selectService(${JSON.stringify(svc.title)})">
+        <div class="service-card-image" style="${svc.image_url ? `background-image:url('${svc.image_url}')` : ''}">
+          <span class="num">${String(i + 1).padStart(2, '0')}</span>
+        </div>
+        <div class="service-card-body">
+          <h3>${svc.title}${svc.subtitle ? `<br><span>${svc.subtitle}</span>` : ''}</h3>
+          ${svc.price_label ? `<div class="price-tag">${svc.price_label}</div>` : ''}
+        </div>
+      </div>
+    `).join('');
+  } catch (err) {
+    console.error('Failed to load services:', err);
+  }
+}
+
+async function initializeFounderPhotos() {
   try {
     const res = await fetch('/api/settings');
     if (!res.ok) return;
     const settings = await res.json();
-
-    document.querySelectorAll('.service-card-image[data-img-key]').forEach(frame => {
-      const key = frame.dataset.imgKey;
-      if (settings[key]) {
-        frame.style.backgroundImage = `url('${settings[key]}')`;
-        frame.classList.add('has-image');
-      }
-    });
 
     document.querySelectorAll('.founder-photo-frame[data-img-key]').forEach(frame => {
       const key = frame.dataset.imgKey;
@@ -98,8 +115,17 @@ async function initializeServiceImages() {
         frame.style.backgroundImage = `url('${settings[key]}')`;
       }
     });
+
+    const textMap = {
+      founder1Name: 'founder_1_name', founder1Role: 'founder_1_role', founder1Bio: 'founder_1_bio',
+      founder2Name: 'founder_2_name', founder2Role: 'founder_2_role', founder2Bio: 'founder_2_bio'
+    };
+    Object.entries(textMap).forEach(([elId, settingKey]) => {
+      const el = document.getElementById(elId);
+      if (el && settings[settingKey]) el.textContent = settings[settingKey];
+    });
   } catch (err) {
-    console.error('Failed to load service tile images:', err);
+    console.error('Failed to load founder photos:', err);
   }
 }
 
@@ -141,11 +167,18 @@ function selectService(serviceName) {
   if (!container || !titleEl) return;
   
   container.innerHTML = '';
-  const itemConfig = serviceRegistry[serviceName];
+  const itemConfig = serviceRegistry[serviceName] || { base: 0, type: 'flat', custom: true };
 
-  if (!itemConfig) return;
-
-  if (itemConfig.type === 'hourly') {
+  if (itemConfig.custom) {
+    titleEl.innerHTML = "Request a <em>Custom Quote</em>";
+    container.innerHTML = `
+      <div class="tile-card" onclick="selectDuration('Custom Quote Request', 0, true)">
+        <div class="tile-meta"><span>A</span><div class="indicator"></div></div>
+        <h4>Tell us what you need <span class="tile-price">Quote</span></h4>
+        <p>This is a newer offering — add any details below and we'll confirm pricing with you directly.</p>
+      </div>
+    `;
+  } else if (itemConfig.type === 'hourly') {
     titleEl.innerHTML = "Select Session <em>Hours</em>";
     container.innerHTML = `
       <div class="tile-card" onclick="selectDuration('Standard Session (Base 3 Hours)', ${itemConfig.base})">
@@ -308,3 +341,4 @@ window.selectService = selectService;
 window.selectDuration = selectDuration;
 window.prevStep = prevStep;
 window.submitFinalBooking = submitFinalBooking;
+                                                                            

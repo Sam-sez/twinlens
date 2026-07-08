@@ -52,6 +52,18 @@ async function migrate() {
     );
   `);
 
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS services (
+      id SERIAL PRIMARY KEY,
+      title TEXT NOT NULL,
+      subtitle TEXT,
+      price_label TEXT,
+      image_url TEXT,
+      sort_order INTEGER DEFAULT 0,
+      created_at TIMESTAMP DEFAULT NOW()
+    );
+  `);
+
   // NEW PIPELINE: Client Inquiries Lead Ledger
   await pool.query(`
     CREATE TABLE IF NOT EXISTS bookings (
@@ -86,6 +98,29 @@ async function migrate() {
       ('Half Day', 'Intimate coverage', 'Contact for pricing', '6 hours', 'Getting ready photos, ceremony, family photos', 1),
       ('Full Day', 'Complete coverage', 'Contact for pricing', '8 hours', 'Engagement session, getting ready, ceremony, family photos, reception, sunset couple photos', 2);
     `);
+  }
+
+  const { rows: sRows } = await pool.query('SELECT COUNT(*)::int AS count FROM services');
+  if (sRows[0].count === 0) {
+    // Carry over any photos already uploaded under the old settings keys, so nothing gets lost.
+    const { rows: settingsRows } = await pool.query('SELECT key, value FROM settings');
+    const settingsMap = {};
+    settingsRows.forEach(r => { settingsMap[r.key] = r.value; });
+
+    const defaults = [
+      ['Party Vlogs', 'Event Tracking', 'From K60', settingsMap['service_party_vlogs'] || null, 1],
+      ['Engagement Vlogs', 'Milestone Cinematic', 'From K160', settingsMap['service_engagement_vlogs'] || null, 2],
+      ['Advertising', 'Commercial Production', 'From K50', settingsMap['service_advertising'] || null, 3],
+      ['Graduation Vlogs', 'Memory Capture', 'From K160', settingsMap['service_graduation_vlogs'] || null, 4],
+      ['Graphics Design', 'Visual Identity', 'From K150', settingsMap['service_graphics_design'] || null, 5],
+      ['Social Media Management', 'Page Curation', 'From K200', settingsMap['service_social_media'] || null, 6]
+    ];
+    for (const [title, subtitle, price_label, image_url, sort_order] of defaults) {
+      await pool.query(
+        'INSERT INTO services (title, subtitle, price_label, image_url, sort_order) VALUES ($1,$2,$3,$4,$5)',
+        [title, subtitle, price_label, image_url, sort_order]
+      );
+    }
   }
 }
 

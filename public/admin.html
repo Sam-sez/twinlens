@@ -52,51 +52,46 @@
   </div>
 
   <div class="tab-panel" id="tab-founders">
-    <div class="admin-form">
-      <label>Clive Makalicha</label>
+    <form class="admin-form" id="founder1Form">
+      <label>Photo</label>
       <div id="founder1Preview" style="width:152px;height:152px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--ink);border:1px solid var(--line);margin-top:8px;"></div>
       <button type="button" class="upload-btn" data-founder="founder_1_photo">Upload / replace photo</button>
-    </div>
-    <div class="admin-form">
-      <label>Lucky Mukubonda</label>
+      <label>Name</label>
+      <input type="text" id="f1Name" placeholder="e.g. Clive Makalicha">
+      <label>Role</label>
+      <input type="text" id="f1Role" placeholder="e.g. Photographer & Co-Founder">
+      <label>Bio</label>
+      <textarea id="f1Bio" placeholder="A couple of sentences about him"></textarea>
+      <button type="submit" style="margin-top:20px;">Save Clive's details</button>
+    </form>
+
+    <form class="admin-form" id="founder2Form">
+      <label>Photo</label>
       <div id="founder2Preview" style="width:152px;height:152px;border-radius:50%;background-size:cover;background-position:center;background-color:var(--ink);border:1px solid var(--line);margin-top:8px;"></div>
       <button type="button" class="upload-btn" data-founder="founder_2_photo">Upload / replace photo</button>
-    </div>
+      <label>Name</label>
+      <input type="text" id="f2Name" placeholder="e.g. Lucky Mukubonda">
+      <label>Role</label>
+      <input type="text" id="f2Role" placeholder="e.g. Photographer & Co-Founder">
+      <label>Bio</label>
+      <textarea id="f2Bio" placeholder="A couple of sentences about him"></textarea>
+      <button type="submit" style="margin-top:20px;">Save Lucky's details</button>
+    </form>
     <div class="small-note" id="foundersStatus"></div>
   </div>
 
   <div class="tab-panel" id="tab-services">
-    <div class="admin-form">
-      <label>Party Vlogs</label>
-      <div id="servicePartyVlogsPreview" style="width:100%;aspect-ratio:4/3;background-size:cover;background-repeat:no-repeat;background-position:center;background-color:var(--ink);border:1px solid var(--line);margin-top:8px;border-radius:4px;"></div>
-      <button type="button" class="upload-btn" data-service="service_party_vlogs">Upload / replace photo</button>
-    </div>
-    <div class="admin-form">
-      <label>Engagement Vlogs</label>
-      <div id="serviceEngagementVlogsPreview" style="width:100%;aspect-ratio:4/3;background-size:cover;background-repeat:no-repeat;background-position:center;background-color:var(--ink);border:1px solid var(--line);margin-top:8px;border-radius:4px;"></div>
-      <button type="button" class="upload-btn" data-service="service_engagement_vlogs">Upload / replace photo</button>
-    </div>
-    <div class="admin-form">
-      <label>Advertising</label>
-      <div id="serviceAdvertisingPreview" style="width:100%;aspect-ratio:4/3;background-size:cover;background-repeat:no-repeat;background-position:center;background-color:var(--ink);border:1px solid var(--line);margin-top:8px;border-radius:4px;"></div>
-      <button type="button" class="upload-btn" data-service="service_advertising">Upload / replace photo</button>
-    </div>
-    <div class="admin-form">
-      <label>Graduation Vlogs</label>
-      <div id="serviceGraduationVlogsPreview" style="width:100%;aspect-ratio:4/3;background-size:cover;background-repeat:no-repeat;background-position:center;background-color:var(--ink);border:1px solid var(--line);margin-top:8px;border-radius:4px;"></div>
-      <button type="button" class="upload-btn" data-service="service_graduation_vlogs">Upload / replace photo</button>
-    </div>
-    <div class="admin-form">
-      <label>Graphics Design</label>
-      <div id="serviceGraphicsDesignPreview" style="width:100%;aspect-ratio:4/3;background-size:cover;background-repeat:no-repeat;background-position:center;background-color:var(--ink);border:1px solid var(--line);margin-top:8px;border-radius:4px;"></div>
-      <button type="button" class="upload-btn" data-service="service_graphics_design">Upload / replace photo</button>
-    </div>
-    <div class="admin-form">
-      <label>Social Media Management</label>
-      <div id="serviceSocialMediaPreview" style="width:100%;aspect-ratio:4/3;background-size:cover;background-repeat:no-repeat;background-position:center;background-color:var(--ink);border:1px solid var(--line);margin-top:8px;border-radius:4px;"></div>
-      <button type="button" class="upload-btn" data-service="service_social_media">Upload / replace photo</button>
-    </div>
-    <div class="small-note" id="servicesStatus"></div>
+    <form class="admin-form" id="serviceForm">
+      <label>Service name (shown as the tile title on your site)</label>
+      <input type="text" id="sTitle" placeholder="e.g. Party Vlogs" required>
+      <label>Subtitle (shown under the name)</label>
+      <input type="text" id="sSubtitle" placeholder="e.g. Event Tracking">
+      <label>Price label (shown on the tile)</label>
+      <input type="text" id="sPrice" placeholder="e.g. From K60">
+      <button type="submit" style="margin-top:20px;">Add service</button>
+    </form>
+    <div class="small-note" id="servicesStatus">Every service below appears on your homepage exactly as named here — add, rename, delete, or swap its photo any time.</div>
+    <div id="serviceList" style="margin-top:20px;"></div>
   </div>
 
   <div class="tab-panel" id="tab-gallery">
